@@ -20,6 +20,8 @@ from PIL import Image, ImageDraw, ImageEnhance
 """https://pystray.readthedocs.io/en/latest/usage.html"""
 from pystray import Icon, Menu, MenuItem
 
+logger = logging.getLogger(__name__)
+
 LOCALE_SENGLISHCOUNTRYNAME: int = 0x1002
 """Constant to obtain english name of the country/region, for example, Germany for Deutschland.
 https://learn.microsoft.com/en-us/windows/win32/intl/locale-senglish-constants"""
@@ -83,7 +85,7 @@ class TrayIcon:
             if country_name:
                 retval = Image.open("flags/" + country_name + ".png")
         except Exception as e:
-            logging.error("Flag not found: %s", str(e))
+            logger.error("Flag not found: %s", str(e))
         finally:
             return retval if retval else UNDEFINED_FLAG
 
