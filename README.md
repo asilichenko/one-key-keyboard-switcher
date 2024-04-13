@@ -94,7 +94,7 @@ You can find all supported languages along with their IDs and country names here
 
 ## Temporary pause and continue listening the hotkeys
 
-1. Right click on the tray icon
+1. Right-click on the tray icon
 2. You will see the popup-menu
 3. Click on the "Pause"
 
