@@ -122,7 +122,22 @@ To unpause - click "Continue":
 
 # Build process
 
-[TODO]
+This program may be built into an exe-file using `pyinstaller`:
+```
+pip install pyinstaller
+
+pyinstaller --noconsole main.py
+```
+
+But for proper building and copying of important resources, there is a special build script - [build.py](build.py), which:
+
+1. Removes previous files of the previous distribution build.
+2. Prepares the icon if set:
+   * Copies specified icon and saves it in the proper format (see [icon_generator.py](icon_generator.py).copy_icon()).
+   * Generates an icon with two partially overlapped flags (see [icon_generator.py](icon_generator.py).generate_icon())
+3. Runs `pyinstaller` to create an executable file with the specifications provided in [main.spec](main.spec).
+4. Copies resources specified in the `RESOURCES` constant, such as images from [flags/*.png](flags/) and the [config.ini](config.ini) file.
+5. Creates an archive for distribution.
 
 # Sources
 
