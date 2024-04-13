@@ -49,6 +49,14 @@ When the user presses down any key, the `_on_key_press` method of all listeners 
 
 When the user releases the key, the method `_on_key_release` of the specific listener is called. If the user holds the key for too long, nothing happens; otherwise, a new keyboard layout will be set.
 
+* `right SHIFT` -> ![tray_icon-us](https://github.com/asilichenko/one-key-keyboard-switcher/assets/1503214/2ca93ced-19bf-4819-a0da-0b33f4e7d369)
+* `right CTRL` -> ![tray_icon-uk](https://github.com/asilichenko/one-key-keyboard-switcher/assets/1503214/2e6161d4-2c56-43b3-b7b1-49142d60b6d2)
+* `left CTRL` -> 
+![tray_icon-us](https://github.com/asilichenko/one-key-keyboard-switcher/assets/1503214/2ca93ced-19bf-4819-a0da-0b33f4e7d369) ->
+![tray_icon-de](https://github.com/asilichenko/one-key-keyboard-switcher/assets/1503214/35e3086f-424d-4dcd-b6cc-14f460a608db) ->
+![tray_icon-uk](https://github.com/asilichenko/one-key-keyboard-switcher/assets/1503214/2e6161d4-2c56-43b3-b7b1-49142d60b6d2) ->
+![tray_icon-us](https://github.com/asilichenko/one-key-keyboard-switcher/assets/1503214/2ca93ced-19bf-4819-a0da-0b33f4e7d369)
+
 ## Change keyboard layout
 
 The feature to change the keyboard layout is implemented using win32api in the script [keyboard_layout_controller.py](keyboard_layout_controller.py).
