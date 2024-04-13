@@ -171,8 +171,8 @@ This program is designed to work on Windows systems only due to its dependency o
 
 # Credits
 
-* Image [icons/keyboard.svg](icons/keyboard.svg) - is under license `CC BY 4.0`, [source https://iconduck.com/icons/12138/keyboard](https://iconduck.com/icons/12138/keyboard)
-* Image [flags/United States.png](flags/United%20States.png) - is under Creative Commons ([Attribution-ShareAlike 4.0 International](https://creativecommons.org/licenses/by-sa/4.0/)) license, source [https://emojipedia.org/openmoji/15.0/flag-united-states](https://emojipedia.org/openmoji/15.0/flag-united-states)
+* Image [icons/keyboard.svg](icons/keyboard.svg) - is under [CC BY 4.0](https://creativecommons.org/licenses/by-sa/4.0/) license, source [https://iconduck.com/icons/12138/keyboard](https://iconduck.com/icons/12138/keyboard)
+* Image [flags/United States.png](flags/United%20States.png) - is under [CC BY 4.0](https://creativecommons.org/licenses/by-sa/4.0/) license, source [https://emojipedia.org/openmoji/15.0/flag-united-states](https://emojipedia.org/openmoji/15.0/flag-united-states)
 
 # Disclaimer
 
