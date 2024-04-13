@@ -77,7 +77,7 @@ Some examples of different layout IDs:
 Last 16 bits of a full layout ID represent the country or the language:
 * `0x409` - `EN`, English (United States)
 * `0x407` - `DE`, German (Germany)
-* `0x422` - `UK`, Ukrainian (Unkraine)
+* `0x422` - `UK`, Ukrainian (Ukraine)
 
 How do I get `0x422` from `-0xf57fbde`, you may wonder. Let's represent this value in the proper negative 32-bit format:
 ```
