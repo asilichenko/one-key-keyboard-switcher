@@ -4,7 +4,7 @@ This simple program was developed to implement keyboard layout switching using j
 
 It utilizes the win32api, thus it will only work on Windows systems.
 
-<img alt="title" width="600" src="https://github.com/asilichenko/one-key-keyboard-switcher/assets/1503214/f4a7f680-fba4-4d7d-8e6a-3e717a26c885"/>
+<img alt="title" width="600" src="docs/img/title.jpg"/>
 
 _Title image credits:_
 
@@ -31,7 +31,7 @@ The program provides a convenient way to switch between keyboard layouts using a
 4. Start keyboard monitor ([keyboard_layout_monitor.py](keyboard_layout_monitor.py)):
    * Start the tray icon ([tray_icon.py](tray_icon.py)) with the current layout flag ([flags/\*.png](flags)).
 
-<img src="https://github.com/asilichenko/one-key-keyboard-switcher/assets/1503214/99715458-0da9-40fd-b764-e16ad2462101" width="600"/>
+<img src="docs/diagrams/start_sequence.png" width="600"/>
 
 ## Layout monitoring
 
@@ -134,7 +134,7 @@ To unpause - click "Continue":
 
 ![tray_icon_exit](https://github.com/asilichenko/one-key-keyboard-switcher/assets/1503214/f961fd10-c202-4fbd-8936-c67f25a4b05c)
 
-<img src="https://github.com/asilichenko/one-key-keyboard-switcher/assets/1503214/fa7b406f-f4dd-49f6-b51d-83e109992cd9" width="600"/>
+<img src="docs/diagrams/stop_sequence.png" width="600"/>
 
 # Build process
 
