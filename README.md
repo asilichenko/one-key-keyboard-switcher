@@ -6,6 +6,14 @@ It utilizes the win32api, thus it will only work on Windows systems.
 
 <img alt="title" width="600" src="https://github.com/asilichenko/one-key-keyboard-switcher/assets/1503214/f4a7f680-fba4-4d7d-8e6a-3e717a26c885"/>
 
+_Title image credits:_
+
+> https://iconduck.com/icons/12138/keyboard
+> 
+> https://emojipedia.org/openmoji/15.0/flag-united-states
+> 
+> https://creativecommons.org/licenses/by-sa/4.0/
+
 ## How it works
 
 The program provides a convenient way to switch between keyboard layouts using a single key. Instead of the usual method of using a key combination (like `Alt + Shift`), this program allows users to assign the `right CTRL` and `right SHIFT` keys to specific layouts, and the `left CTRL` key for a round-robin switching method.
