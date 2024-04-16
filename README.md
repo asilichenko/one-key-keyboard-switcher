@@ -1,6 +1,10 @@
 # One key switch keyboard layout for Windows
 
-This simple program was developed to implement keyboard layout switching using just one key. It utilizes the win32api, thus it will only work on Windows systems.
+This simple program was developed to implement keyboard layout switching using just one key.
+
+It utilizes the win32api, thus it will only work on Windows systems.
+
+<img alt="title" width="600" src="https://github.com/asilichenko/one-key-keyboard-switcher/assets/1503214/f4a7f680-fba4-4d7d-8e6a-3e717a26c885"/>
 
 ## How it works
 
