@@ -30,7 +30,6 @@ class KeyboardLayoutMonitor:
 
     def __init__(self, start_listen, stop_listen, check_interval=None):
         self._monitor_thread = None
-        self._running = False
         self._check_interval = check_interval if check_interval is not None else CHECK_INTERVAL
 
         self._layout_id = keyboard_layout_controller.get_keyboard_layout_id()
@@ -38,7 +37,7 @@ class KeyboardLayoutMonitor:
         self._tray_icon = TrayIcon(start_listen, stop_listen, country_id)
 
     def _monitoring(self):
-        while self._running:
+        while True:
             layout_id = keyboard_layout_controller.get_keyboard_layout_id()
             if layout_id != self._layout_id:
                 self._layout_id = layout_id
@@ -50,14 +49,7 @@ class KeyboardLayoutMonitor:
         """Starts monitoring thread and runs tray icon, which is blocking."""
 
         if self._monitor_thread is None:
-            self._running = True
             self._monitor_thread = threading.Thread(target=self._monitoring, daemon=True)
             self._monitor_thread.start()
 
             self._tray_icon.run()  # blocking
-
-    def stop(self):
-        self._running = False
-        if self._monitor_thread:
-            self._monitor_thread.join()  # wait until finished
-            self._monitor_thread = None
