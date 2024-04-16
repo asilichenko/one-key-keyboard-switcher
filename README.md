@@ -31,6 +31,8 @@ The program provides a convenient way to switch between keyboard layouts using a
 4. Start keyboard monitor ([keyboard_layout_monitor.py](keyboard_layout_monitor.py)):
    * Start the tray icon ([tray_icon.py](tray_icon.py)) with the current layout flag ([flags/\*.png](flags)).
 
+<img src="https://github.com/asilichenko/one-key-keyboard-switcher/assets/1503214/99715458-0da9-40fd-b764-e16ad2462101" width="600"/>
+
 ## Layout monitoring
 
 While the program is running it displays current keyboard layout as a flag:
@@ -131,6 +133,8 @@ To unpause - click "Continue":
 3. Click on the "Exit"
 
 ![tray_icon_exit](https://github.com/asilichenko/one-key-keyboard-switcher/assets/1503214/f961fd10-c202-4fbd-8936-c67f25a4b05c)
+
+<img src="https://github.com/asilichenko/one-key-keyboard-switcher/assets/1503214/fa7b406f-f4dd-49f6-b51d-83e109992cd9" width="600"/>
 
 # Build process
 
