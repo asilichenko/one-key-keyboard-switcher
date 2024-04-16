@@ -33,6 +33,8 @@ The program provides a convenient way to switch between keyboard layouts using a
 
 <img src="docs/diagrams/start_sequence.png" width="600"/>
 
+* [start_sequence.txt](docs/diagrams/start_sequence.txt)
+
 ## Layout monitoring
 
 While the program is running it displays current keyboard layout as a flag:
@@ -136,6 +138,8 @@ To unpause - click "Continue":
 
 <img src="docs/diagrams/stop_sequence.png" width="600"/>
 
+* [stop_sequence.txt](docs/diagrams/stop_sequence.txt)
+
 # Build process
 
 This program may be built into an exe-file using `pyinstaller`:
@@ -171,6 +175,10 @@ But for proper building and copying of important resources, there is a special b
 * [config.ini](config.ini) - Contains configuration settings.
 * [flags/\*.png](flags) - Contains images of flags representing different countries, which are displayed in the tray as icon linked to the current keyboard layout language.
 * [icons/\*.\*](icons) - Just various icons for the built executable file.
+
+## Documentation
+* [docs/diagrams/](docs/diagrams) - Diagrams
+* [docs/img/](docs/img) - Addidional images
 
 ## Build files
 
