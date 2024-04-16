@@ -1,0 +1,80 @@
+bottomparticipants
+
+title Starting sequence
+
+actor User
+fontawesome f015 main.py #green
+fontawesome f1de config_reader.py #orange
+fontawesome f11c keyboard_listener.py
+fontawesome f06e keyboard_layout_monitor.py #blue
+fontawesome6regular f2b4 tray_icon.py #red
+
+User->main.py: start
+activate User
+
+activate main.py #lightgray
+main.py->config_reader.py:<<create>>
+activate config_reader.py
+config_reader.py-->main.py:Config
+deactivate config_reader.py
+
+main.py->config_reader.py:read "config.ini"
+activate config_reader.py #orange
+main.py<--config_reader.py:
+deactivate config_reader.py
+
+loop 'ctrl', 'right shift', 'right ctrl'
+main.py->keyboard_listener.py:<<create>>
+activate keyboard_listener.py
+main.py<--keyboard_listener.py:KeyboardListener
+deactivate keyboard_listener.py
+end
+
+main.py->keyboard_layout_monitor.py:<<create>>
+activate keyboard_layout_monitor.py
+
+keyboard_layout_monitor.py->tray_icon.py:<<create>>
+activate tray_icon.py
+keyboard_layout_monitor.py<--tray_icon.py:TrayIcon
+deactivate tray_icon.py
+
+main.py<--keyboard_layout_monitor.py:KeyboardLayoutMonitor
+deactivate keyboard_layout_monitor.py
+
+destroyafter config_reader.py
+
+main.py->keyboard_layout_monitor.py:start()
+activate keyboard_layout_monitor.py
+
+keyboard_layout_monitor.py->keyboard_layout_monitor.py:start daemon thread
+activate keyboard_layout_monitor.py #lightblue
+space 1
+deactivate keyboard_layout_monitor.py
+
+keyboard_layout_monitor.py->tray_icon.py:run()
+activate tray_icon.py #red
+
+tray_icon.py->main.py:start to listen
+activate main.py
+
+loop #lightgreen 'ctrl', 'right shift', 'righ ctrl'
+main.py->keyboard_listener.py:start_listen()
+activate keyboard_listener.py
+
+keyboard_listener.py->keyboard_listener.py:attach
+activate keyboard_listener.py #lightgreen
+space 1
+deactivate keyboard_listener.py
+
+keyboard_listener.py-->main.py:
+deactivate keyboard_listener.py
+end
+main.py-->tray_icon.py:
+deactivate main.py
+
+tray_icon.py->tray_icon.py:run tray icon
+activate tray_icon.py
+
+tray_icon.py-->>User:
+
+deactivate User
