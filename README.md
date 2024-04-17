@@ -235,7 +235,7 @@ This program is designed to work on Windows systems only due to its dependency o
 
 # License
 
-[GNU License LGPL v3.0](LICENSE)
+[GNU License GPL v3.0 and later](LICENSE)
 
 # Credits
 
