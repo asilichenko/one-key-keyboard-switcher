@@ -1,13 +1,17 @@
+bottomparticipants
+
 title Continue sequence
 
 actor User
 fontawesome6regular f2b4 tray_icon.py #red
 fontawesome f015 main.py #green
 fontawesome f11c keyboard_listener.py
+fontawesome f17a Win32 #orange
 
 activecolor tray_icon.py #red
 activecolor main.py #gray
 activecolor keyboard_listener.py #lightgreen
+activecolor Win32 #orange
 
 User->tray_icon.py:Continue
 activate User
@@ -39,9 +43,30 @@ end
 main.py-->tray_icon.py:
 deactivate main.py
 
-#
+# get flag
 
-tray_icon.py->tray_icon.py:update icon
+tray_icon.py->tray_icon.py:_get_flag()
+activate tray_icon.py #darkred
+
+tray_icon.py->tray_icon.py:_get_country_name()
+activate tray_icon.py #darkred
+
+tray_icon.py->Win32:get country name
+activate Win32
+Win32-->tray_icon.py:
+deactivate Win32
+
+tray_icon.py-->tray_icon.py:country name
+deactivate tray_icon.py
+
+tray_icon.py->tray_icon.py:load flag image
+
+tray_icon.py-->tray_icon.py:flag image
+deactivate tray_icon.py
+
+# /get flag
+
+tray_icon.py->tray_icon.py:update tray icon
 tray_icon.py->tray_icon.py:update menu text
 
 tray_icon.py-->User:
