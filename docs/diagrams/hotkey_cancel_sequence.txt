@@ -1,0 +1,122 @@
+title Cancel hotkey sequence
+
+actor User
+
+fontawesome f11c keyboard
+
+participantgroup #lightgreen keyboard_listener.py
+entity CTRL listener
+entity right CTRL listener
+entity right SHIFT listener
+end
+
+#
+# On Key Press 'CTRL'
+
+User->keyboard: key down 'ctrl'
+activate User
+activate keyboard
+space
+deactivate User
+
+#
+
+parallel
+
+keyboard->CTRL listener:_on_key_press()
+activate CTRL listener
+
+keyboard->right CTRL listener:
+activate right CTRL listener
+
+keyboard->right SHIFT listener:
+activate right SHIFT listener
+
+parallel off
+
+#
+
+parallel
+
+CTRL listener->CTRL listener:store key down time
+right CTRL listener->right CTRL listener:reset key down time
+right SHIFT listener->right SHIFT listener:reset key down time
+
+
+parallel off
+
+#
+
+parallel
+
+right SHIFT listener-->keyboard:
+
+deactivate CTRL listener
+deactivate right CTRL listener
+deactivate right SHIFT listener
+
+parallel off
+
+#
+# On Key Press 'C'
+
+User->keyboard: key down 'C'
+activate User
+
+#
+
+parallel
+
+keyboard->CTRL listener:_on_key_press()
+activate CTRL listener
+
+keyboard->right CTRL listener:
+activate right CTRL listener
+
+keyboard->right SHIFT listener:
+activate right SHIFT listener
+
+parallel off
+
+#
+
+deactivate User
+
+#
+
+parallel
+
+CTRL listener->CTRL listener:reset key down time
+right CTRL listener->right CTRL listener:reset key down time
+right SHIFT listener->right SHIFT listener:reset key down time
+
+parallel off
+
+#
+
+parallel
+
+right SHIFT listener-->keyboard:
+
+deactivate CTRL listener
+deactivate right CTRL listener
+deactivate right SHIFT listener
+
+parallel off
+
+
+#
+# On Key Release
+
+User->keyboard: release key 'ctrl'
+activate User
+
+keyboard->CTRL listener:_on_key_release()
+deactivate keyboard
+deactivate User
+activate CTRL listener
+
+CTRL listener->CTRL listener:reset key down time
+
+space 
+deactivate CTRL listener

@@ -1,0 +1,49 @@
+title Continue sequence
+
+actor User
+fontawesome6regular f2b4 tray_icon.py #red
+fontawesome f015 main.py #green
+fontawesome f11c keyboard_listener.py
+
+activecolor tray_icon.py #red
+activecolor main.py #gray
+activecolor keyboard_listener.py #lightgreen
+
+User->tray_icon.py:Continue
+activate User
+activate tray_icon.py
+
+tray_icon.py->tray_icon.py:_toggle_pause()
+
+tray_icon.py->main.py:start_listen()
+activate main.py
+
+loop 'ctrl', 'right shift', 'right ctrl'
+
+main.py->keyboard_listener.py:start_listen()
+activate keyboard_listener.py
+
+keyboard_listener.py->keyboard_listener.py:attach on press
+activate keyboard_listener.py
+deactivateafter keyboard_listener.py
+
+keyboard_listener.py->keyboard_listener.py:attach on release
+activate keyboard_listener.py
+deactivateafter keyboard_listener.py
+
+keyboard_listener.py-->main.py:
+deactivate keyboard_listener.py
+
+end
+
+main.py-->tray_icon.py:
+deactivate main.py
+
+#
+
+tray_icon.py->tray_icon.py:update icon
+tray_icon.py->tray_icon.py:update menu text
+
+tray_icon.py-->User:
+deactivate tray_icon.py
+deactivateafter User

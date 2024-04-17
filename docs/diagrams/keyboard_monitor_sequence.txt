@@ -1,0 +1,70 @@
+bottomparticipants
+title Keyboard layout monitor
+
+fontawesome f06e keyboard_layout_monitor.py #blue
+fontawesome f085 keyboard_layout_controller.py #34495e
+fontawesome f17a Win32 #orange
+fontawesome6regular f2b4 tray_icon.py #red
+
+autoactivation
+
+activate keyboard_layout_monitor.py
+keyboard_layout_monitor.py->keyboard_layout_controller.py:get_keyboard_layout_id()
+
+keyboard_layout_controller.py->Win32:get foreground window
+Win32-->keyboard_layout_controller.py:
+
+keyboard_layout_controller.py->Win32:get window thread process
+Win32-->keyboard_layout_controller.py:
+
+keyboard_layout_controller.py->Win32:get keyboard layout
+Win32-->keyboard_layout_controller.py:
+
+keyboard_layout_controller.py-->keyboard_layout_monitor.py:
+
+autoactivation off
+
+group #2f2e7b condition #white [is layout changed]
+
+keyboard_layout_monitor.py->keyboard_layout_monitor.py:store new layout id
+
+autoactivation
+
+keyboard_layout_monitor.py->keyboard_layout_controller.py:extract country ID
+keyboard_layout_controller.py-->keyboard_layout_monitor.py:
+keyboard_layout_monitor.py->tray_icon.py:update_flag()
+
+tray_icon.py->tray_icon.py:_get_flag()
+
+tray_icon.py->tray_icon.py:_get_country_name()
+
+tray_icon.py->Win32:get country name
+Win32-->tray_icon.py:
+
+tray_icon.py-->tray_icon.py:
+
+autoactivation off
+tray_icon.py->tray_icon.py: load flag image
+
+tray_icon.py-->tray_icon.py:
+deactivate tray_icon.py
+
+tray_icon.py->tray_icon.py:set icon
+
+group #2f2e7b condition #white [is listening paused]
+
+tray_icon.py->tray_icon.py:_dim_icon()
+activate tray_icon.py
+space
+deactivate tray_icon.py
+
+end
+
+tray_icon.py-->keyboard_layout_monitor.py:
+deactivate tray_icon.py
+
+end
+
+keyboard_layout_monitor.py->keyboard_layout_monitor.py:sleep()
+deactivate keyboard_layout_monitor.py
+
