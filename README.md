@@ -18,6 +18,10 @@ _Title image credits:_
 
 The program provides a convenient way to switch between keyboard layouts using a single key. Instead of the usual method of using a key combination (like `Alt + Shift`), this program allows users to assign the `right CTRL` and `right SHIFT` keys to specific layouts, and the `left CTRL` key for a round-robin switching method.
 
+<img src="docs/diagrams/start_sequence.png" width="600"/>
+
+* [docs/diagrams/start_sequence.txt](docs/diagrams/start_sequence.txt)
+
 1. Start program from the script [main.py](main.py).
 2. Read configuration settings from the [config.ini](config.ini) by [config_reader.py](config_reader.py):
    * **right shift** - Language ID to be selected by the right SHIFT key press.
@@ -31,11 +35,11 @@ The program provides a convenient way to switch between keyboard layouts using a
 4. Start keyboard monitor ([keyboard_layout_monitor.py](keyboard_layout_monitor.py)):
    * Start the tray icon ([tray_icon.py](tray_icon.py)) with the current layout flag ([flags/\*.png](flags)).
 
-<img src="docs/diagrams/start_sequence.png" width="600"/>
-
-* [start_sequence.txt](docs/diagrams/start_sequence.txt)
-
 ## Layout monitoring
+
+<img src="docs/diagrams/keyboard_monitor_sequence.png" width="600"/>
+
+* [docs/diagrams/keyboard_monitor_sequence.txt](docs/diagrams/keyboard_monitor_sequence.txt)
 
 While the program is running it displays current keyboard layout as a flag:
 
@@ -60,6 +64,14 @@ The periodicity of checking the keyboard layout can be set by the `layout check 
 The check process is running in the daemon thread, so it doesn't interfere with other program logic execution. As a daemon thread, it will be automatically killed when the program exits, but the `stop` method is implemented as well.
 
 ## Hotkeys
+
+<img src="docs/diagrams/hotkey_sequence.png" width="600"/>
+
+* [docs/diagrams/hotkey_sequence.txt](docs/diagrams/hotkey_sequence.txt)
+
+<img src="docs/diagrams/hotkey_cancel_sequence.png" width="600"/>
+
+* [docs/diagrams/hotkey_cancel_sequence.txt](docs/diagrams/hotkey_cancel_sequence.txt)
 
 When the user presses down any key, the `_on_key_press` method of all listeners is triggered (see [keyboard_listener.py](keyboard_listener.py)). The listener attached to that key stores the time of event, while all other listeners reset this value. This filters out the event where the user presses another key while holding a hotkey, for example, pressing the `C` key while holding down `CTRL`, so the hotkey event will be skipped during this time.
 
@@ -108,7 +120,7 @@ You can find all supported languages along with their IDs and country names here
 
 * [https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-lcid/a9eac961-e77d-41a6-90a5-ce1a8b0cdb9c](learn.microsoft.com)
 
-## Temporary pause and continue listening the hotkeys
+## Pause and continue listening the hotkeys
 
 1. Right-click on the tray icon
 2. You will see the popup-menu
@@ -124,9 +136,17 @@ You can find all supported languages along with their IDs and country names here
 
 Despite this, the flags icon will still be changed according to the current layout; only the attachment of hotkeys is canceled.
 
+<img src="docs/diagrams/pause_sequence.png" width="600"/>
+
+* [docs/diagrams/pause_sequence.txt](docs/diagrams/pause_sequence.txt)
+
 To unpause - click "Continue":
 
 ![tray_icon_continue](docs/img/tray_icon_continue.png)
+
+<img src="docs/diagrams/continue_sequence.png" width="600"/>
+
+* [docs/diagrams/continue_sequence.txt](docs/diagrams/continue_sequence.txt)
 
 ## Exit from the program
 
@@ -138,7 +158,7 @@ To unpause - click "Continue":
 
 <img src="docs/diagrams/stop_sequence.png" width="600"/>
 
-* [stop_sequence.txt](docs/diagrams/stop_sequence.txt)
+* [docs/diagrams/stop_sequence.txt](docs/diagrams/stop_sequence.txt)
 
 # Build process
 
