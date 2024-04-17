@@ -42,7 +42,7 @@ deactivate main.py
 #
 
 tray_icon.py->tray_icon.py:_dim_icon()
-activate tray_icon.py
+activate tray_icon.py #darkred
 tray_icon.py->tray_icon.py:update icon
 deactivateafter tray_icon.py
 
