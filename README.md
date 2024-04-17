@@ -179,6 +179,15 @@ But for proper building and copying of important resources, there is a special b
 4. Copies resources specified in the `RESOURCES` constant, such as images from [flags/*.png](flags/) and the [config.ini](config.ini) file.
 5. Creates an archive for distribution.
 
+# Configuration
+
+Through the [config.ini](config.ini) file, you can configure:
+
+* Binding keyboard language (layout) to the `right SHIFT` key - option `right shift`. It may be either in decimal (1058) or hexadecimal (0x422) format. See `Language ID` at [Microsoft Learn](https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-lcid/a9eac961-e77d-41a6-90a5-ce1a8b0cdb9c).
+* Binding keyboard language (layout) to the `right CTRL` key - option `right ctrl`. It may be either in decimal (1058) or hexadecimal (0x422) format. See `Language ID` at [Microsoft Learn](https://learn.microsoft.com/en-us/openspecs/windows_protocols/ms-lcid/a9eac961-e77d-41a6-90a5-ce1a8b0cdb9c).
+* How often should the program check if the keyboard layout has changed to update the tray icon - option `layout check interval`. It may be either an integer or a float (minimum value is 0.1).
+* Duration of holding the hot-key to consider it a timeout - option `key press timeout`. It may be either an integer or a float (minimum value is 0.1).
+
 # Sources
 
 ## Python scripts
