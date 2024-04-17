@@ -17,7 +17,7 @@
 
 __author__ = "Oleksii Sylichenko"
 __copyright__ = "Copyright © 2024 Oleksii Sylichenko"
-__license__ = "GNU GPU v3+"
+__license__ = "GNU GPL v3+"
 __version__ = "1.0"
 
 import logging
