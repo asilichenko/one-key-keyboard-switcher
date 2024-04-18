@@ -249,6 +249,7 @@ This program is designed to work on Windows systems only due to its dependency o
 
 * py-scripts to exe-file - pyinstaller: [Using PyInstaller](https://pyinstaller.org/en/stable/usage.html)
 * threading in Python: [Thread-based parallelism](https://docs.python.org/3/library/threading.html)
+* tray icon in Python: [pystray](https://pystray.readthedocs.io/en/latest/index.html)
 
 # Disclaimer
 
