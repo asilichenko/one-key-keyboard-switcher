@@ -243,10 +243,10 @@ This program is designed to work on Windows systems only due to its dependency o
 
 * Image [icons/keyboard.svg](icons/keyboard.svg) - is under [CC BY 4.0](https://creativecommons.org/licenses/by-sa/4.0/) license, source [https://iconduck.com/icons/12138/keyboard](https://iconduck.com/icons/12138/keyboard)
 * Image [flags/United States.png](flags/United%20States.png) - is under [CC BY 4.0](https://creativecommons.org/licenses/by-sa/4.0/) license, source [https://emojipedia.org/openmoji/15.0/flag-united-states](https://emojipedia.org/openmoji/15.0/flag-united-states)
-* Sequence diagrams were created using the web-editor: https://sequencediagram.org/
 
 # References
 
+* Sequence diagrams were created using the web-editor: https://sequencediagram.org/
 * py-scripts to exe-file - pyinstaller: [Using PyInstaller](https://pyinstaller.org/en/stable/usage.html)
 * threading in Python: [Thread-based parallelism](https://docs.python.org/3/library/threading.html)
 * tray icon in Python: [pystray](https://pystray.readthedocs.io/en/latest/index.html)
