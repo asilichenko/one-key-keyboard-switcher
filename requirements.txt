@@ -1,0 +1,5 @@
+Pillow~=9.4.0
+pystray~=0.19.5
+keyboard~=0.13.5
+pypiwin32~=223
+pywin32~=306

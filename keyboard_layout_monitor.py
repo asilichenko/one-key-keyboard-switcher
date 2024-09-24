@@ -15,11 +15,12 @@
 
 import threading
 import time
+from typing import Optional, Callable
 
 import keyboard_layout_controller
 from tray_icon import TrayIcon
 
-CHECK_INTERVAL = 0.5
+CHECK_INTERVAL: float = 0.5
 """Check keyboard layout every `value` seconds.
 Is used when window is changed and language also changed but not by our hotkey"""
 
@@ -28,24 +29,24 @@ class KeyboardLayoutMonitor:
     """Starts tray icon with flag of the keyboard language.
     Checks keyboard layout and update flag icon if layout is changed."""
 
-    def __init__(self, start_listen, stop_listen, check_interval=None):
-        self._monitor_thread = None
-        self._check_interval = check_interval if check_interval is not None else CHECK_INTERVAL
+    def __init__(self, start_listen: Callable, stop_listen: Callable, check_interval: float = None) -> None:
+        self._monitor_thread: Optional[threading.Thread] = None
+        self._check_interval: float = check_interval if check_interval is not None else CHECK_INTERVAL
 
-        self._layout_id = keyboard_layout_controller.get_keyboard_layout_id()
-        country_id = keyboard_layout_controller.extract_country_id(self._layout_id)
-        self._tray_icon = TrayIcon(start_listen, stop_listen, country_id)
+        self._layout_id: int = keyboard_layout_controller.get_keyboard_layout_id()
+        country_id: int = keyboard_layout_controller.extract_country_id(self._layout_id)
+        self._tray_icon: TrayIcon = TrayIcon(start_listen, stop_listen, country_id)
 
-    def _monitoring(self):
+    def _monitoring(self) -> None:
         while True:
-            layout_id = keyboard_layout_controller.get_keyboard_layout_id()
+            layout_id: int = keyboard_layout_controller.get_keyboard_layout_id()
             if layout_id != self._layout_id:
                 self._layout_id = layout_id
-                country_id = keyboard_layout_controller.extract_country_id(self._layout_id)
+                country_id: int = keyboard_layout_controller.extract_country_id(self._layout_id)
                 self._tray_icon.update_flag(country_id)
             time.sleep(self._check_interval)
 
-    def start(self):
+    def start(self) -> None:
         """Starts monitoring thread and runs tray icon, which is blocking."""
 
         if self._monitor_thread is None:

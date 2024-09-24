@@ -14,24 +14,27 @@
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import logging
+from logging import Logger
 import ctypes
+from typing import Optional, Callable
+
 from PIL import Image, ImageDraw, ImageEnhance
 
 """https://pystray.readthedocs.io/en/latest/usage.html"""
 from pystray import Icon, Menu, MenuItem
 
-logger = logging.getLogger(__name__)
+logger: Logger = logging.getLogger(__name__)
 
 LOCALE_SENGLISHCOUNTRYNAME: int = 0x1002
 """Constant to obtain english name of the country/region, for example, Germany for Deutschland.
 https://learn.microsoft.com/en-us/windows/win32/intl/locale-senglish-constants"""
 
 
-def create_image(width, height, color1, color2):
+def create_image(width: int, height: int, color1: str, color2: str) -> Image:
     """Generate an image and draw a pattern."""
 
-    image = Image.new('RGB', (width, height), color1)
-    dc = ImageDraw.Draw(image)
+    retval: Image = Image.new('RGB', (width, height), color1)
+    dc: ImageDraw = ImageDraw.Draw(retval)
 
     dc.rectangle(
         (width // 2, 0, width, height // 2),
@@ -40,60 +43,59 @@ def create_image(width, height, color1, color2):
         (0, height // 2, width // 2, height),
         fill=color2)
 
-    return image
+    return retval
 
 
-UNDEFINED_FLAG = create_image(64, 64, 'red', 'yellow')
+UNDEFINED_FLAG: Image = create_image(64, 64, 'red', 'yellow')
 
 
 class TrayIcon:
-    ICON_NAME = "Keyboard layout country flag"
+    ICON_NAME: str = "Keyboard layout country flag"
 
-    PAUSE_TEXT = "Pause"
-    CONTINUE_TEXT = "Continue"
-    EXIT_TEXT = "Exit"
+    PAUSE_TEXT: str = "Pause"
+    CONTINUE_TEXT: str = "Continue"
+    EXIT_TEXT: str = "Exit"
 
-    DIM_LEVEL = 0.5
+    DIM_LEVEL: float = 0.5
 
-    def __init__(self, start_listen_keyboard, stop_listen_keyboard, country_id: int):
-        self._is_paused = False
+    def __init__(self, start_listen_keyboard: Callable, stop_listen_keyboard: Callable, country_id: int) -> None:
+        self._is_paused: bool = False
         self._pause_item_text = self.PAUSE_TEXT
 
-        self._start_listen_keyboard = start_listen_keyboard
-        self._stop_listen_keyboard = stop_listen_keyboard
+        self._start_listen_keyboard: Callable = start_listen_keyboard
+        self._stop_listen_keyboard: Callable = stop_listen_keyboard
 
-        self._country_id = country_id
-        self._icon = Icon(name=self.ICON_NAME,
-                          icon=self._get_flag(),
-                          menu=Menu(
-                              MenuItem(lambda text: self._pause_item_text, self._toggle_pause),
-                              Menu.SEPARATOR,
-                              MenuItem(self.EXIT_TEXT, self.stop)
-                          ))
+        self._country_id: int = country_id
+        self._icon: Icon = Icon(name=self.ICON_NAME,
+                                icon=self._get_flag(),
+                                menu=Menu(
+                                    MenuItem(lambda text: self._pause_item_text, self._toggle_pause),
+                                    Menu.SEPARATOR,
+                                    MenuItem(self.EXIT_TEXT, self.stop)
+                                ))
 
-    def _get_country_name(self):
+    def _get_country_name(self) -> Optional[str]:
         kernel32 = ctypes.windll.kernel32
         country_name = ctypes.create_string_buffer(20)
         result = kernel32.GetLocaleInfoA(self._country_id, LOCALE_SENGLISHCOUNTRYNAME, country_name, len(country_name))
-        if result:
-            return country_name.value.decode()
+        return country_name.value.decode() if result else None
 
-    def _get_flag(self):
-        retval = None
+    def _get_flag(self) -> Image:
+        retval: Optional[Image] = None
         try:
-            country_name = self._get_country_name()
+            country_name: Optional[str] = self._get_country_name()
             if country_name:
                 retval = Image.open("flags/" + country_name + ".png")
         except Exception as e:
-            logger.error("Flag not found: %s", str(e))
+            logger.error(f'Flag not found: {e!s}')
         finally:
             return retval if retval else UNDEFINED_FLAG
 
-    def _dim_icon(self):
-        icon = ImageEnhance.Brightness(self._icon.icon).enhance(self.DIM_LEVEL)
+    def _dim_icon(self) -> None:
+        icon: Image = ImageEnhance.Brightness(self._icon.icon).enhance(self.DIM_LEVEL)
         self._icon.icon = ImageEnhance.Color(icon).enhance(self.DIM_LEVEL)
 
-    def _toggle_pause(self):
+    def _toggle_pause(self) -> None:
         self._is_paused = not self._is_paused
 
         if self._is_paused:
@@ -103,19 +105,19 @@ class TrayIcon:
             self._start_listen_keyboard()
             self._icon.icon = self._get_flag()
 
-        self._pause_item_text = self.CONTINUE_TEXT if self._is_paused else self.PAUSE_TEXT
+        self._pause_item_text: str = self.CONTINUE_TEXT if self._is_paused else self.PAUSE_TEXT
         self._icon.update_menu()
 
-    def update_flag(self, country_id):
+    def update_flag(self, country_id: int) -> None:
         self._country_id = country_id
         self._icon.icon = self._get_flag()
         if self._is_paused:
             self._dim_icon()
 
-    def run(self):
+    def run(self) -> None:
         self._start_listen_keyboard()
         self._icon.run()
 
-    def stop(self):
+    def stop(self) -> None:
         self._stop_listen_keyboard()
         self._icon.stop()

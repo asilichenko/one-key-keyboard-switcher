@@ -21,35 +21,37 @@ __license__ = "GNU GPL v3+"
 __version__ = "1.0"
 
 import logging
+from logging import FileHandler, Logger
+from typing import List
+
 from config_reader import Config
 from keyboard_listener import KeyboardListener
 from keyboard_layout_monitor import KeyboardLayoutMonitor
 
-ERR_LOG_FILENAME = 'error.log'
+ERR_LOG_FILENAME: str = 'error.log'
 
 
-def logging_config():
-    date_format = "%Y-%m-%d %H:%M:%S"
-    log_format = "%(asctime)s [%(levelname)s] %(name)s: %(message)s"
-    logging.basicConfig(format=log_format, datefmt=date_format, level=logging.INFO)  #
+def logging_config() -> None:
+    date_format: str = '%Y-%m-%d %H:%M:%S'
+    log_format: str = '%(asctime)s [%(levelname)s] %(name)s: %(message)s'
+    logging.basicConfig(format=log_format, datefmt=date_format, level=logging.INFO)
 
-    err_log_handler = logging.FileHandler(ERR_LOG_FILENAME)
+    err_log_handler: FileHandler = FileHandler(ERR_LOG_FILENAME)
     err_log_handler.setLevel(logging.ERROR)
     err_log_handler.setFormatter(logging.Formatter(fmt=log_format, datefmt=date_format))
 
-    root_logger = logging.getLogger()
+    root_logger: Logger = logging.getLogger()
     root_logger.addHandler(err_log_handler)
 
 
-if __name__ == '__main__':
+def main() -> None:
     logging_config()
-    logger = logging.getLogger(__name__)
-    logger.info("Start")
+    logger: Logger = logging.getLogger(__name__)
+    logger.info('Start')
 
-    config = Config()
-    config.read_ini()
+    config: Config = Config()
 
-    keyboard_listeners = [
+    keyboard_listeners: List[KeyboardListener] = [
         KeyboardListener('ctrl', timeout=config.key_press_timeout)
     ]
     if config.right_ctrl_lang is not None:
@@ -61,18 +63,19 @@ if __name__ == '__main__':
                                                    lang_id=config.right_shift_lang,
                                                    timeout=config.key_press_timeout))
 
-
-    def start_listen():
+    def start_listen() -> None:
         for listener in keyboard_listeners:
             listener.start_listen()
 
-
-    def stop_listen():
+    def stop_listen() -> None:
         for listener in keyboard_listeners:
             listener.stop_listen()
 
-
-    monitor = KeyboardLayoutMonitor(start_listen, stop_listen, config.layout_check_interval)
+    monitor: KeyboardLayoutMonitor = KeyboardLayoutMonitor(start_listen, stop_listen, config.layout_check_interval)
     monitor.start()
 
-    logging.info("Exit")
+    logging.info('Exit')
+
+
+if __name__ == '__main__':
+    main()

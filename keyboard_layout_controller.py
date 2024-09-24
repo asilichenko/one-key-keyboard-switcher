@@ -12,6 +12,7 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
+from typing import Optional
 
 import win32gui
 import win32api
@@ -21,25 +22,25 @@ import win32process
 https://learn.microsoft.com/en-us/windows/win32/winmsg/wm-inputlangchangerequest"""
 from win32con import WM_INPUTLANGCHANGEREQUEST
 
-INPUTLANGCHANGE_SYSCHARSET = 0x0001
+INPUTLANGCHANGE_SYSCHARSET: int = 0x0001
 """Flag means: set the new input locale to be the keyboard layout.
 https://learn.microsoft.com/en-us/windows/win32/winmsg/wm-inputlangchangerequest
 """
 
 
-def get_keyboard_layout_id():
+def get_keyboard_layout_id() -> int:
     """Returns keyboard layout ID for the foreground window.
 
     :return: keyboard layout ID
     :rtype: int
     """
 
-    foreground_window_handle = win32gui.GetForegroundWindow()
-    thread_id = win32process.GetWindowThreadProcessId(foreground_window_handle)[0]
+    foreground_window_handle: int = win32gui.GetForegroundWindow()
+    thread_id: int = win32process.GetWindowThreadProcessId(foreground_window_handle)[0]
     return win32api.GetKeyboardLayout(thread_id)
 
 
-def extract_country_id(layout_id: int):
+def extract_country_id(layout_id: int) -> int:
     """Extracts country ID from the keyboard layout ID.
     :param layout_id: The ID of the keyboard layout.
     :return: The last 16 bits of the layout ID.
@@ -49,22 +50,22 @@ def extract_country_id(layout_id: int):
     return layout_id & (2 ** 16 - 1)
 
 
-def set_next_layout():
+def set_next_layout() -> None:
     """Sets the next (cyclically) layout in the list as the current one."""
 
-    layouts = win32api.GetKeyboardLayoutList()
-    layout_id = get_keyboard_layout_id()
+    layouts: list = win32api.GetKeyboardLayoutList()
+    layout_id: int = get_keyboard_layout_id()
 
-    index = layouts.index(layout_id)
-    layout_id = layouts[(index + 1) % len(layouts)]
+    index: int = layouts.index(layout_id)
+    layout_id: int = layouts[(index + 1) % len(layouts)]
     set_layout(layout_id)
 
 
-def get_parent_window(hwnd):
+def get_parent_window(hwnd: int) -> Optional[int]:
     return win32gui.GetParent(hwnd)
 
 
-def set_layout(layout_id: int):
+def set_layout(layout_id: int) -> None:
     """Sets the keyboard layout according to either the language ID or the layout ID.
     If a language contains more than one layout, it could be important what you pass to this method
     and what you want to change.
@@ -72,9 +73,9 @@ def set_layout(layout_id: int):
     :param layout_id: Either the keyboard layout ID or the country ID.
     """
 
-    foreground_wnd = win32gui.GetForegroundWindow()
-    parent_hwnd = get_parent_window(foreground_wnd)
-    hwnd = parent_hwnd if parent_hwnd else foreground_wnd
+    foreground_wnd: int = win32gui.GetForegroundWindow()
+    parent_hwnd: int = get_parent_window(foreground_wnd)
+    hwnd: int = parent_hwnd if parent_hwnd else foreground_wnd
     """If the foreground window has a parent, 
     then we have to address the request for a keyboard layout change to its parent.
     

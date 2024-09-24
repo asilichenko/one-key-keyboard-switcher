@@ -18,50 +18,52 @@ import os
 import shutil
 import subprocess
 import datetime
+from typing import List, Optional
+
 import icon_generator
 
-PROJECT_NAME = 'One key layout switcher'
-DIST_ROOT = 'dist/'
-DIST_PATH = DIST_ROOT + PROJECT_NAME + '/'
+PROJECT_NAME: str = 'One key layout switcher'
+DIST_ROOT: str = 'dist/'
+DIST_PATH: str = f'{DIST_ROOT}{PROJECT_NAME}/'
 
-ICON = 'icon.gif'
+ICON: str = 'icon.gif'
 """Should have the same value in the 'main.spec'
 
 If you use icon in 'png' format (or in 'ico' format but created by pillow lib)
 then user's antivirus may recognize your exe file as trojan 'Win64:Evo-Gen'
 """
 
-ICON_TO_COPY = None  # None  # 'icons/keyboard-shortcut.png'  # 'icons/keyboard3.ico'
+ICON_TO_COPY: Optional[str] = None  # None  # 'icons/keyboard-shortcut.png'  # 'icons/keyboard3.ico'
 """First priority: Copy image file and make an icon from it."""
 
-ICON_COUNTRIES = []  # []  # ['United States', 'Ukraine']
+ICON_COUNTRIES: List[str] = []  # []  # ['United States', 'Ukraine']
 """Second priority: Generate an icon with flags of two countries."""
 
-EXE_FILENAME = PROJECT_NAME + '.exe'
-ARCHIVE_FORMAT = 'zip'
-BUILD_DATE = str(datetime.date.today()).replace('-', '')
-ARCHIVE_NAME = (DIST_ROOT + PROJECT_NAME + '-' + BUILD_DATE).replace(' ', '_').lower()
+EXE_FILENAME: str = f'{PROJECT_NAME}.exe'
+ARCHIVE_FORMAT: str = 'zip'
+BUILD_DATE: str = str(datetime.date.today()).replace('-', '')
+ARCHIVE_NAME: str = f'{DIST_ROOT}{PROJECT_NAME}-{BUILD_DATE}'.replace(' ', '_').lower()
 
-RESOURCES = ['flags', 'config.ini']
+RESOURCES: List[str] = ['flags', 'config.ini']
 
 
-def setup():
+def setup() -> None:
     logging_config()
 
 
-def logging_config():
-    log_format = "%(asctime)s: %(message)s"
-    logging.basicConfig(format=log_format, level=logging.INFO, datefmt="%H:%M:%S")
+def logging_config() -> None:
+    log_format: str = '%(asctime)s: %(message)s'
+    logging.basicConfig(format=log_format, level=logging.INFO, datefmt='%H:%M:%S')
 
 
-def clean():
+def clean() -> None:
     logging.info('Clean')
 
     if os.path.exists(DIST_PATH):
         logging.info('\tRemove dist directory: %s', DIST_PATH)
         shutil.rmtree(DIST_PATH)
 
-    archive_filename = ARCHIVE_NAME + '.' + ARCHIVE_FORMAT
+    archive_filename: str = f'{ARCHIVE_NAME}.{ARCHIVE_FORMAT}'
     if os.path.exists(archive_filename):
         logging.info('\tRemove archive: %s', archive_filename)
         os.remove(archive_filename)
@@ -70,26 +72,26 @@ def clean():
 
 
 def make_icon():
-    logging.info("Make icon")
+    logging.info('Make icon')
 
     if ICON_TO_COPY is not None:
-        logging.info("\tCopy icon: %s", ICON_TO_COPY)
+        logging.info('\tCopy icon: %s', ICON_TO_COPY)
         icon_generator.copy_icon(ICON_TO_COPY, ICON)
     elif ICON_COUNTRIES is not None and 2 == len(ICON_COUNTRIES):
-        logging.info("\tGenerate icon for countries: %s", ICON_COUNTRIES)
+        logging.info('\tGenerate icon for countries: %s', ICON_COUNTRIES)
         try:
             icon_generator.generate_icon(ICON_COUNTRIES[0], ICON_COUNTRIES[1], ICON)
         except Exception as e:
-            logging.exception("Failed to create icon: %s", str(e))
+            logging.exception('Failed to create icon: %s', str(e))
             raise e
 
 
-def make_exe():
+def make_exe() -> None:
     make_icon()
 
     logging.info('Make exe file')
     if not os.path.exists(ICON):
-        logging.error("\tIcon file must be present: %s", ICON)
+        logging.error('\tIcon file must be present: %s', ICON)
         raise FileNotFoundError
     subprocess.run([
         'pyinstaller',
@@ -99,19 +101,19 @@ def make_exe():
     ])
 
 
-def copy_resources():
+def copy_resources() -> None:
     logging.info('Copy resources')
     for resource in RESOURCES:
         logging.info('\tCopy resource: %s', resource)
 
-        output = DIST_PATH + resource
+        output: str = f'{DIST_PATH}{resource}'
         if os.path.isdir(resource):
             shutil.copytree(resource, output)
         else:
             shutil.copyfile(resource, output)
 
 
-def make_archive(archive_format):
+def make_archive(archive_format) -> None:
     logging.info('Make %s-archive', archive_format)
     shutil.make_archive(
         ARCHIVE_NAME,

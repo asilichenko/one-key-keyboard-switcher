@@ -14,44 +14,47 @@
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import logging
+from logging import Logger
+from typing import Callable, Optional
+
 import keyboard
 import keyboard_layout_controller
 
-logger = logging.getLogger(__name__)
+logger: Logger = logging.getLogger(__name__)
 
-TIMEOUT = 0.2
+TIMEOUT: float = 0.2
 """If a key was pressed longer than this value in seconds, then do not change the keyboard layout."""
 
 
 class KeyboardListener:
-    _on_press_remove = None
+    _on_press_remove: Optional[Callable] = None
     """Function that removes 'on press' listener."""
 
-    _on_release_remove = None
+    _on_release_remove: Optional[Callable] = None
     """Function that removes 'on release' listener."""
 
-    def __init__(self, key_name, lang_id=None, timeout=None):
+    def __init__(self, key_name: str, lang_id: int = None, timeout: float = None) -> None:
         if lang_id is None:
-            logger.info("Set listener for round switch on '%s'", key_name)
+            logger.info('Set listener for round switch on "%s"', key_name)
         else:
-            logger.info("Set listener for '%s' on '%s'", hex(lang_id), key_name)
+            logger.info('Set listener for "%s" on "%s"', hex(lang_id), key_name)
 
-        self._timeout = timeout if timeout is not None else TIMEOUT
-        self._key_name = key_name
+        self._timeout: float = timeout if timeout is not None else TIMEOUT
+        self._key_name: str = key_name
         """Name of the observed key."""
-        self._key_down_time = 0
+        self._key_down_time: float = 0
         """Time when the key was pressed down."""
-        self._lang_id = lang_id
+        self._lang_id: int = lang_id
         """See LANGID: https://learn.microsoft.com/en-us/windows/win32/msi/localizing-the-error-and-actiontext-tables"""
 
-    def start_listen(self):
+    def start_listen(self) -> None:
         if self._on_press_remove is None:
             self._on_press_remove = keyboard.on_press(self._on_key_press)
 
         if self._on_release_remove is None:
             self._on_release_remove = keyboard.on_release_key(self._key_name, self._on_key_release)
 
-    def stop_listen(self):
+    def stop_listen(self) -> None:
         if self._on_press_remove is not None:
             self._on_press_remove()
             self._on_press_remove = None
@@ -60,18 +63,18 @@ class KeyboardListener:
             self._on_release_remove()
             self._on_release_remove = None
 
-    def _is_timeout(self, key_release_time):
+    def _is_timeout(self, key_release_time: float) -> bool:
         """
-        Checks if a key is has been pressed longer than the specified timeout.
+        Checks if a key has been pressed longer than the specified timeout.
 
         :param key_release_time: The time when the key was released
         :return: True if the key is pressed or has been pressed longer than the specified timeout, otherwise False.
         """
 
-        duration = key_release_time - self._key_down_time
+        duration: float = key_release_time - self._key_down_time
         return duration > self._timeout
 
-    def _on_key_press(self, event):
+    def _on_key_press(self, event) -> None:
         """Activates when any key is being pressed down."""
 
         if self._key_name == event.name:
@@ -80,7 +83,7 @@ class KeyboardListener:
         else:
             self._key_down_time = 0
 
-    def _on_key_release(self, event):
+    def _on_key_release(self, event) -> None:
         if self._is_timeout(event.time):
             self._key_down_time = 0
             return

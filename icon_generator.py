@@ -15,28 +15,28 @@
 
 from PIL import Image
 
-FLAG_FILENAME_TEMPLATE = "flags/{}.png"
+FLAG_FILENAME_TEMPLATE: str = 'flags/{}.png'
 
-OUTPUT_FORMAT = 'gif'
+OUTPUT_FORMAT: str = 'gif'
 """If you use icon in 'png' format (or in 'ico' format but created by pillow lib)
 then user's antivirus may recognize your exe file as trojan "Win64:Evo-Gen"""
 
-OUTPUT_FILENAME = 'icon.{}'.format(OUTPUT_FORMAT)
+OUTPUT_FILENAME: str = f'icon.{OUTPUT_FORMAT}'
 
-SIZE = 255
-SUB_SIZE = int(SIZE * 0.75)
-SHIFT_POS = SIZE - SUB_SIZE
+SIZE: int = 255
+SUB_SIZE: int = int(SIZE * 0.75)
+SHIFT_POS: int = SIZE - SUB_SIZE
 
 
-def create_image(country1, country2):
+def create_image(country1: str, country2: str) -> Image:
     """Creates an image with two partial overlapping flags."""
 
-    retval = Image.new('RGBA', (SIZE, SIZE))
+    retval: Image = Image.new('RGBA', (SIZE, SIZE))
 
-    image1 = Image.open(FLAG_FILENAME_TEMPLATE.format(country1))
+    image1: Image = Image.open(FLAG_FILENAME_TEMPLATE.format(country1))
     image1 = image1.resize((SUB_SIZE, SUB_SIZE))
 
-    image2 = Image.open(FLAG_FILENAME_TEMPLATE.format(country2))
+    image2: Image = Image.open(FLAG_FILENAME_TEMPLATE.format(country2))
     image2 = image2.resize((SUB_SIZE, SUB_SIZE))
 
     retval.paste(image1, (0, 0))
@@ -47,7 +47,7 @@ def create_image(country1, country2):
     return retval
 
 
-def generate_icon(country1, country2, output_filename=OUTPUT_FILENAME):
+def generate_icon(country1: str, country2: str, output_filename: str = OUTPUT_FILENAME) -> None:
     """Create image with two partial overlapped flags and saves it as file.
 
     :param country1: name of the background flag country.
@@ -55,26 +55,30 @@ def generate_icon(country1, country2, output_filename=OUTPUT_FILENAME):
     :param output_filename: file name for the output image; default if 'icon.tiff'.
     """
 
-    image = create_image(country1, country2)
+    image: Image = create_image(country1, country2)
     image.save(output_filename, sizes=[image.size])
 
 
-def copy_icon(input_filename, output_filename=OUTPUT_FILENAME):
+def copy_icon(input_filename: str, output_filename: str = OUTPUT_FILENAME) -> None:
     """Opens image file and saves it in proper format into proper place.
 
     :param input_filename: file name of original image.
     :param output_filename: file name of image to save.
     """
 
-    image = Image.open(input_filename)
+    image: Image = Image.open(input_filename)
     image.resize((SIZE, SIZE))
     image.save(output_filename, sizes=[SIZE])
 
 
-if __name__ == "__main__":
-    _country1 = "United States"
-    _country2 = "Ukraine"
-    _output_name = "us-uk"
+def main() -> None:
+    country1 = 'United States'
+    country2 = 'Ukraine'
+    output_name = 'us-uk'
 
-    _output_filename = "icons/{}.{}".format(_output_name, OUTPUT_FORMAT)
-    generate_icon(_country1, _country2, _output_filename)
+    output_filename = f'icons/{output_name}.{OUTPUT_FORMAT}'
+    generate_icon(country1, country2, output_filename)
+
+
+if __name__ == "__main__":
+    main()
