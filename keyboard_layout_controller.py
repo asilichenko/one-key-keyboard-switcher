@@ -98,4 +98,7 @@ def set_layout(layout_id: int) -> None:
     
     For sync request, use SendMessage, but note that this call
     does not update the language in the system language panel,
-    but you can use it in addition to the PostMessage call."""
+    but you can use it in addition to the PostMessage call.
+    
+    Always use the original ID. If it is negative, keep it negative; do not mask it with & 0xFFFFFFF.
+    """
