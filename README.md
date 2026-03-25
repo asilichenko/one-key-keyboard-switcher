@@ -4,6 +4,9 @@ This simple program was developed to implement keyboard layout switching using j
 
 It utilizes the win32api, thus it will only work on Windows systems.
 
+> [!IMPORTANT]
+> The app does not log or transmit any keystrokes. It only listens for a configured hotkey to switch layout.
+
 <img alt="title" width="600" src="docs/img/title.jpg"/>
 
 _Title image credits:_
