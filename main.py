@@ -1,6 +1,6 @@
 #  This program implements the ability to switch keyboard layouts with only one key press.
 #
-#  Copyright (C) 2024 Oleksii Sylichenko (a.silichenko@gmail.com)
+#  Copyright (C) 2024-2026 Oleksii Sylichenko (a.silichenko@gmail.com)
 #
 #  This program is free software: you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
@@ -16,19 +16,24 @@
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 __author__ = "Oleksii Sylichenko"
-__copyright__ = "Copyright © 2024 Oleksii Sylichenko"
+__copyright__ = "Copyright © 2024-2026 Oleksii Sylichenko"
 __license__ = "GNU GPL v3+"
 __version__ = "1.0"
 
 import logging
+import os
 from logging import FileHandler, Logger
+from pathlib import Path
 from typing import List
 
 from config_reader import Config
 from keyboard_listener import KeyboardListener
 from keyboard_layout_monitor import KeyboardLayoutMonitor
 
-ERR_LOG_FILENAME: str = 'error.log'
+LOG_DIR: Path = Path(os.getenv('LOCALAPPDATA')) / "OneKeyLayoutSwitcher"
+LOG_DIR.mkdir(parents=True, exist_ok=True)
+
+ERR_LOG_FILENAME: Path = LOG_DIR / 'error.log'
 
 
 def logging_config() -> None:
