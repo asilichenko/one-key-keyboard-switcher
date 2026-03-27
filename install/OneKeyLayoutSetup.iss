@@ -6,7 +6,10 @@
 #define MyAppVersion "1.0.0"
 #define MyAppPublisher "Oleksii Sylichenko"
 #define MyAppURL "https://github.com/asilichenko/one-key-keyboard-switcher"
+
 #define MyAppExeName "One key layout switcher.exe"
+#define LocalAppDataDirName "OneKeyLayoutSwitcher"
+
 #define DistDir "..\dist"
 #define OutputBaseFilename "OneKeyLayoutSetup"
 #define SourceDir DistDir + "\" + MyAppName
@@ -34,9 +37,11 @@ ArchitecturesAllowed=x64compatible
 ArchitecturesInstallIn64BitMode=x64compatible
 DisableProgramGroupPage=yes
 LicenseFile="..\LICENSE"
+
 ; Remove the following line to run in administrative install mode (install for all users).
-PrivilegesRequired=lowest
+; PrivilegesRequired=lowest
 PrivilegesRequiredOverridesAllowed=dialog
+
 OutputDir={#DistDir}
 OutputBaseFilename={#OutputBaseFilename}
 SolidCompression=yes
@@ -53,8 +58,14 @@ Source: "{#SourceDir}\config.ini"; DestDir: "{app}"; Flags: ignoreversion
 Source: "{#SourceDir}\flags\*"; DestDir: "{app}\flags"; Flags: ignoreversion recursesubdirs createallsubdirs
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
+; [Tasks]
+; Name: autostart; Description: "Запускати {#MyAppName} разом з Windows"; GroupDescription: "Додаткові завдання"; 
+[Tasks]
+Name: "autostarticon"; Description: "Запускати {#MyAppName} разом з Windows"; \
+GroupDescription: "{cm:AdditionalIcons}";
+
 [Icons]
-Name: "{autoprograms}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
+Name: "{autostartup}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
 
 [Run]
 Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent
@@ -76,3 +87,5 @@ end;
 [UninstallDelete]
 Type: filesandordirs; Name: "{app}\*"
 Type: dirifempty; Name: "{app}"
+Type: filesandordirs; Name: "{localappdata}\{#LocalAppDataDirName}"
+
