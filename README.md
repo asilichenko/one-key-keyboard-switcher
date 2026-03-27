@@ -17,6 +17,15 @@ _Title image credits:_
 > 
 > https://creativecommons.org/licenses/by-sa/4.0/
 
+## Contents
+- [Build process](#build-process)
+
+Logs dir: `%LOCALAPPDATA%\OneKeyLayoutSwitcher\`
+
+Definaed in:
+- main.py
+- OneKeyLayoutSetup.iss - uninstall removes the dir
+
 ## How it works
 
 The program provides a convenient way to switch between keyboard layouts using a single key. Instead of the usual method of using a key combination (like `Alt + Shift`), this program allows users to assign the `right CTRL` and `right SHIFT` keys to specific layouts, and the `left CTRL` key for a round-robin switching method.
@@ -165,15 +174,6 @@ To unpause - click "Continue":
 
 # Build process
 
-This program may be built into an exe-file using `pyinstaller`:
-```
-pip install pyinstaller
-
-pyinstaller --noconsole main.py
-```
-
-* _for more details see_: [https://pyinstaller.org/en/stable/usage.html](https://pyinstaller.org/en/stable/usage.html)
-
 But for proper building and copying of important resources, there is a special build script - [build.py](build.py), which:
 
 1. Removes previous files of the previous distribution build.
@@ -183,6 +183,40 @@ But for proper building and copying of important resources, there is a special b
 3. Runs `pyinstaller` to create an executable file with the specifications provided in [main.spec](main.spec).
 4. Copies resources specified in the `RESOURCES` constant, such as images from [flags/*.png](flags/) and the [config.ini](config.ini) file.
 5. Creates an archive for distribution.
+
+* _for more details of using `pyinstaller` see_: [https://pyinstaller.org/en/stable/usage.html](https://pyinstaller.org/en/stable/usage.html)
+
+## Створити білд
+
+1. Створити віртуальне середовище
+```
+python -m venv .venv
+```
+
+2. Активувати віртуальне середовище
+```
+.venv\Scripts\activate.bat
+```
+
+3. Оновити pip, setuptools і wheel
+```
+python -m pip install --upgrade pip setuptools wheel
+```
+
+4. Встановити `pyinstaller`
+```
+pip install pyinstaller
+```
+
+5. Встановити залежності
+```
+pip install -r requirements.txt
+```
+
+6. Створити білд
+```
+python build.py
+```
 
 # Configuration
 
