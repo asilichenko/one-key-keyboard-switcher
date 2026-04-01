@@ -44,7 +44,7 @@ ARCHIVE_FORMAT: str = 'zip'
 BUILD_DATE: str = str(datetime.date.today()).replace('-', '')
 ARCHIVE_NAME: str = f'{DIST_ROOT}{PROJECT_NAME}-{BUILD_DATE}'.replace(' ', '_').lower()
 
-RESOURCES: List[str] = ['flags', 'config.ini']
+RESOURCES: List[str] = ['flags', 'config.ini', 'Assets']
 
 
 def setup() -> None:
