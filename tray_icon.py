@@ -1,4 +1,4 @@
-#  Copyright (C) 2024 Oleksii Sylichenko (a.silichenko@gmail.com)
+#  Copyright (C) 2024, 2026 Oleksii Sylichenko (a.silichenko@gmail.com)
 #
 #  This program is free software: you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
@@ -13,12 +13,24 @@
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-import logging
-from logging import Logger
 import ctypes
+import logging
+import os
+from logging import Logger
+from pathlib import Path
 from typing import Optional, Callable
 
-from PIL import Image, ImageDraw, ImageEnhance
+from PIL import (
+    Image as PILImage,
+    ImageDraw as PILImageDraw,
+    ImageEnhance
+)
+from PIL.Image import Image
+from PIL.ImageDraw import ImageDraw
+
+import constants
+import message_box
+import paths
 
 """https://pystray.readthedocs.io/en/latest/usage.html"""
 from pystray import Icon, Menu, MenuItem
@@ -33,8 +45,8 @@ https://learn.microsoft.com/en-us/windows/win32/intl/locale-senglish-constants""
 def create_image(width: int, height: int, color1: str, color2: str) -> Image:
     """Generate an image and draw a pattern."""
 
-    retval: Image = Image.new('RGB', (width, height), color1)
-    dc: ImageDraw = ImageDraw.Draw(retval)
+    retval: Image = PILImage.new('RGB', (width, height), color1)
+    dc: ImageDraw = PILImageDraw.Draw(retval)
 
     dc.rectangle(
         (width // 2, 0, width, height // 2),
@@ -54,6 +66,7 @@ class TrayIcon:
 
     PAUSE_TEXT: str = "Pause"
     CONTINUE_TEXT: str = "Continue"
+    OPEN_ERR_LOG_FILE: str = "Open error log file"
     EXIT_TEXT: str = "Exit"
 
     DIM_LEVEL: float = 0.5
@@ -68,8 +81,10 @@ class TrayIcon:
         self._country_id: int = country_id
         self._icon: Icon = Icon(name=self.ICON_NAME,
                                 icon=self._get_flag(),
+                                title=f"{constants.APP_NAME} v{constants.APP_VERSION}",
                                 menu=Menu(
                                     MenuItem(lambda text: self._pause_item_text, self._toggle_pause),
+                                    MenuItem(self.OPEN_ERR_LOG_FILE, self._open_err_log_file),
                                     Menu.SEPARATOR,
                                     MenuItem(self.EXIT_TEXT, self.stop)
                                 ))
@@ -85,7 +100,8 @@ class TrayIcon:
         try:
             country_name: Optional[str] = self._get_country_name()
             if country_name:
-                retval = Image.open("flags/" + country_name + ".png")
+                root_dir: str = paths.get_root_dir()
+                retval = PILImage.open(f"{root_dir}/flags/{country_name}.png")
         except Exception as e:
             logger.error(f'Flag not found: {e!s}')
         finally:
@@ -107,6 +123,18 @@ class TrayIcon:
 
         self._pause_item_text: str = self.CONTINUE_TEXT if self._is_paused else self.PAUSE_TEXT
         self._icon.update_menu()
+
+    @staticmethod
+    def _open_err_log_file() -> None:
+        try:
+            err_log_path: Path = paths.get_err_log_file_path()
+            if err_log_path.exists():
+                # Відкриває файл асоційованою програмою (зазвичай Блокнот)
+                os.startfile(str(err_log_path))
+            else:
+                message_box.show_error_message(f"Error log file does not exist:\n{err_log_path}")
+        except Exception as e:
+            message_box.show_error_message(f"Failed to open error log file.\nDetails:\n{e}")
 
     def update_flag(self, country_id: int) -> None:
         self._country_id = country_id
