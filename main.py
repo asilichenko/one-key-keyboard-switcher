@@ -21,19 +21,13 @@ __license__ = "GNU GPL v3+"
 __version__ = "1.0"
 
 import logging
-import os
 from logging import FileHandler, Logger
-from pathlib import Path
 from typing import List
 
+import paths
 from config_reader import Config
-from keyboard_listener import KeyboardListener
 from keyboard_layout_monitor import KeyboardLayoutMonitor
-
-LOG_DIR: Path = Path(os.getenv('LOCALAPPDATA')) / "OneKeyLayoutSwitcher"
-LOG_DIR.mkdir(parents=True, exist_ok=True)
-
-ERR_LOG_FILENAME: Path = LOG_DIR / 'error.log'
+from keyboard_listener import KeyboardListener
 
 
 def logging_config() -> None:
@@ -41,7 +35,7 @@ def logging_config() -> None:
     log_format: str = '%(asctime)s [%(levelname)s] %(name)s: %(message)s'
     logging.basicConfig(format=log_format, datefmt=date_format, level=logging.INFO)
 
-    err_log_handler: FileHandler = FileHandler(ERR_LOG_FILENAME)
+    err_log_handler: FileHandler = FileHandler(paths.get_err_log_file_path())
     err_log_handler.setLevel(logging.ERROR)
     err_log_handler.setFormatter(logging.Formatter(fmt=log_format, datefmt=date_format))
 
