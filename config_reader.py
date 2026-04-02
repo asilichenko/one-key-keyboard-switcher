@@ -16,7 +16,7 @@
 import logging
 
 # https://docs.python.org/3/library/configparser.html#configparser.ConfigParser.get
-from configparser import ConfigParser
+# from configparser import ConfigParser
 from typing import Optional
 
 logger: logging.Logger = logging.getLogger(__name__)
@@ -42,19 +42,26 @@ SETTINGS_CHECK_INTERVAL: str = 'layout check interval'
 SETTINGS_TIMEOUT: str = 'key press timeout'
 """If the key is pressed for longer than this specified time in seconds, the layout will not be changed."""
 
+DEFAULT_CONFIG = {
+    'right_ctrl_lang': 0x422,
+    'right_shift_lang': 0x409,
+    'key_press_timeout': 0.15,
+    'layout_check_interval': 0.5
+}
+
 
 class Config:
     """Reads config from an INI file and stores data into fields."""
 
     def __init__(self) -> None:
-        self._config: ConfigParser = ConfigParser()
+        # self._config: ConfigParser = ConfigParser()
         try:
-            self._config.read(CONFIG_FILENAME)
+            # self._config.read(CONFIG_FILENAME)
 
-            self.right_ctrl_lang: int = self._get_int(SETTINGS_SECTION, SETTINGS_RIGHT_CTRL)
-            self.right_shift_lang: int = self._get_int(SETTINGS_SECTION, SETTINGS_RIGHT_SHIFT)
-            self.key_press_timeout: float = self._get_float(SETTINGS_SECTION, SETTINGS_TIMEOUT)
-            self.layout_check_interval: float = self._get_float(SETTINGS_SECTION, SETTINGS_CHECK_INTERVAL)
+            self.right_ctrl_lang: int = int(DEFAULT_CONFIG['right_ctrl_lang'])
+            self.right_shift_lang: int = int(DEFAULT_CONFIG['right_shift_lang'])
+            self.key_press_timeout: float = float(DEFAULT_CONFIG['key_press_timeout'])
+            self.layout_check_interval: float = float(DEFAULT_CONFIG['layout_check_interval'])
         except Exception as e:
             logger.error('Config read issue: %s', str(e))
 
