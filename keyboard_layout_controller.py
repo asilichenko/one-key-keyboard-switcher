@@ -12,6 +12,7 @@
 #
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
 from typing import Optional
 
 import win32gui
@@ -53,7 +54,7 @@ def extract_country_id(layout_id: int) -> int:
 def set_next_layout() -> None:
     """Sets the next (cyclically) layout in the list as the current one."""
 
-    layouts: list = win32api.GetKeyboardLayoutList()
+    layouts: tuple = win32api.GetKeyboardLayoutList()
     layout_id: int = get_keyboard_layout_id()
 
     index: int = layouts.index(layout_id)
@@ -74,7 +75,7 @@ def set_layout(layout_id: int) -> None:
     """
 
     foreground_wnd: int = win32gui.GetForegroundWindow()
-    parent_hwnd: int = get_parent_window(foreground_wnd)
+    parent_hwnd: Optional[int] = get_parent_window(foreground_wnd)
     hwnd: int = parent_hwnd if parent_hwnd else foreground_wnd
     """If the foreground window has a parent, 
     then we have to address the request for a keyboard layout change to its parent.
@@ -102,3 +103,8 @@ def set_layout(layout_id: int) -> None:
     
     Always use the original ID. If it is negative, keep it negative; do not mask it with & 0xFFFFFFF.
     """
+
+
+if __name__ == '__main__':
+    layout_list = win32api.GetKeyboardLayoutList()
+    print(layout_list)
