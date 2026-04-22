@@ -51,6 +51,11 @@ def extract_country_id(layout_id: int) -> int:
     return layout_id & (2 ** 16 - 1)
 
 
+def get_country_id() -> int:
+    layout_id: int = get_keyboard_layout_id()
+    return extract_country_id(layout_id)
+
+
 def set_next_layout() -> None:
     """Sets the next (cyclically) layout in the list as the current one."""
 
@@ -106,5 +111,10 @@ def set_layout(layout_id: int) -> None:
 
 
 if __name__ == '__main__':
-    layout_list = win32api.GetKeyboardLayoutList()
-    print(layout_list)
+    print()
+
+    _layout_list = win32api.GetKeyboardLayoutList()
+    print(f'Layout list: {_layout_list}')
+
+    _country_id = get_country_id()
+    print(f'Current active window layout country id: {hex(_country_id)}')
