@@ -2,20 +2,21 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 ; Non-commercial use only
 
-#define MyAppName "One Key Layout Switcher"
-#define MyAppVersion "1.0.0"
+#define MyAppName "OneKey Layout Switcher"
+#define MyAppVersion "1.1.0"
 #define MyAppPublisher "Oleksii Sylichenko"
 #define MyAppURL "https://github.com/asilichenko/one-key-keyboard-switcher"
 
-#define MyAppExeName "One key layout switcher.exe"
+#define MyAppExeName "OneKeyLayoutSwitcher.exe"
 #define LocalAppDataDirName "OneKeyLayoutSwitcher"
 
 #define DistDir "..\dist"
-#define OutputBaseFilename "OneKeyLayoutSetup"
-#define SourceDir DistDir + "\" + MyAppName
+#define OutputBaseFilename "OneKeyLayoutSwitcherSetup"
+#define SourceDir DistDir
 
 [Setup]
-; NOTE: The value of AppId uniquely identifies this application. Do not use the same AppId value in installers for other applications.
+; NOTE: The value of AppId uniquely identifies this application.
+; Do not use the same AppId value in installers for other applications.
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
 AppId={{E4A0A116-F880-4EEC-B631-52780092766B}
 AppName={#MyAppName}
@@ -39,7 +40,7 @@ DisableProgramGroupPage=yes
 LicenseFile="..\LICENSE"
 
 ; Remove the following line to run in administrative install mode (install for all users).
-; PrivilegesRequired=lowest
+PrivilegesRequired=lowest
 PrivilegesRequiredOverridesAllowed=dialog
 
 OutputDir={#DistDir}
@@ -54,8 +55,7 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 
 [Files]
 Source: "{#SourceDir}\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#SourceDir}\config.ini"; DestDir: "{app}"; Flags: ignoreversion
-Source: "{#SourceDir}\flags\*"; DestDir: "{app}\flags"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "{#SourceDir}\onekey_layout_switcher\*"; DestDir: "{app}\onekey_layout_switcher"; Flags: ignoreversion recursesubdirs createallsubdirs
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 ; [Tasks]
