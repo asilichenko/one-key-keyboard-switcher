@@ -1,0 +1,25 @@
+app:
+  exe_name: app.exe
+  exe_display_name: Application Display Name
+  exe_description: Application Description
+
+version:
+  major: 1
+  minor: 0
+  build: 0
+  revision: 0
+
+package:
+  name: PublisherName.PackageName
+  display_name: Package Display Name
+  publisher: CN=00000000-0000-0000-0000-000000000000
+  publisher_display_name: Publisher Name
+
+signing:
+  cert_file: path_to_your_certificate.pfx
+  cert_password: CERT_PASSWORD
+  # set cert password in the file `.env`: CERT_PASSWORD=your_password
+
+tools:
+  makeappx: C:\Program Files (x86)\Windows Kits\10\App Certification Kit\MakeAppx.exe
+  signtool: C:\Program Files (x86)\Windows Kits\10\App Certification Kit\signtool.exe
