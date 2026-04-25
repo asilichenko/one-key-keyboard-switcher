@@ -65,8 +65,8 @@ class FlagUtils:
 
     @staticmethod
     def _load_sprite(file_name: str) -> ImageFile:
-        assets_images_dir: str = paths.get_assets_images_dir()
-        return Image.open(os.path.join(assets_images_dir, file_name))
+        assets_dir: str = paths.get_assets_dir()
+        return Image.open(os.path.join(assets_dir, file_name))
 
     def flag_for(self, country_code: str) -> Image.Image:
         if country_code in self._cache:
