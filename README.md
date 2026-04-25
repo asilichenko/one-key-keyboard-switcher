@@ -276,10 +276,25 @@ This program is designed to work on Windows systems only due to its dependency o
 
 [GNU License GPL v3.0 and later](LICENSE)
 
+
 # Credits
 
-* Image [icons/keyboard.svg](icons/keyboard.svg) - is under [CC BY 4.0](https://creativecommons.org/licenses/by-sa/4.0/) license, source [https://iconduck.com/icons/12138/keyboard](https://iconduck.com/icons/12138/keyboard)
-* Image [flags/United States.png](flags/United%20States.png) - is under [CC BY 4.0](https://creativecommons.org/licenses/by-sa/4.0/) license, source [https://emojipedia.org/openmoji/15.0/flag-united-states](https://emojipedia.org/openmoji/15.0/flag-united-states)
+* Image [icons/keyboard.svg](icons/keyboard.svg) is licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).  
+  Source: https://iconduck.com/icons/12138/keyboard
+
+
+## OpenMoji
+
+This product uses OpenMoji (https://openmoji.org).  
+Licensed under CC BY-SA 4.0: https://creativecommons.org/licenses/by-sa/4.0/
+
+**Files:**
+- [onekey_layout_switcher/assets](onekey_layout_switcher/assets)
+
+**Modifications:** 
+- Icons were resized and combined into a single file.
+- Colors of the Ukrainian flag were adjusted to match the official state colors.
+
 
 # References
 
