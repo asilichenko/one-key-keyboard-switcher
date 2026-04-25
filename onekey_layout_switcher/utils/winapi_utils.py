@@ -48,7 +48,11 @@ ERROR_INSUFFICIENT_BUFFER = 122
 kernel32: ctypes.WinDLL = ctypes.windll.kernel32
 
 GetLocaleInfoW = kernel32.GetLocaleInfoW
-GetCurrentPackageFamilyName = kernel32.GetCurrentPackageFamilyName
+
+try:
+    GetCurrentPackageFamilyName = kernel32.GetCurrentPackageFamilyName
+except AttributeError:
+    GetCurrentPackageFamilyName = None
 
 
 def get_locale_info(locale, lc_type):
@@ -72,6 +76,8 @@ def get_country_code(country_id) -> Optional[str]:
 
 def is_msix_package() -> bool:
     """Повертає True якщо застосунок запущено з MSIX пакету."""
+    if GetCurrentPackageFamilyName is None:
+        return False
     buf_len = ctypes.c_uint32(0)
     ret = GetCurrentPackageFamilyName(ctypes.byref(buf_len), None)
     return ret in (0, ERROR_INSUFFICIENT_BUFFER)
