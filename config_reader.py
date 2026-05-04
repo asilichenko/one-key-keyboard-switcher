@@ -15,32 +15,7 @@
 
 import logging
 
-# https://docs.python.org/3/library/configparser.html#configparser.ConfigParser.get
-# from configparser import ConfigParser
-from typing import Optional
-
 logger: logging.Logger = logging.getLogger(__name__)
-
-CONFIG_FILENAME: str = 'config.ini'
-
-SETTINGS_SECTION: str = 'Settings'
-
-SETTINGS_RIGHT_CTRL: str = 'right ctrl'
-"""Option name for the language ID to be associated with the right CTRL key press event."""
-
-SETTINGS_RIGHT_SHIFT: str = 'right shift'
-"""Option name for the language ID to be associated with the right SHIFT key press event."""
-
-MIN_FLOAT: float = 0.1
-"""Minimum value for float values. 
-If the option value is not empty and is valid, 
-then it will be stored as a value no less than this specified value."""
-
-SETTINGS_CHECK_INTERVAL: str = 'layout check interval'
-"""How often layout change should be checked."""
-
-SETTINGS_TIMEOUT: str = 'key press timeout'
-"""If the key is pressed for longer than this specified time in seconds, the layout will not be changed."""
 
 DEFAULT_CONFIG = {
     'right_ctrl_lang': 0x422,
@@ -54,71 +29,10 @@ class Config:
     """Reads config from an INI file and stores data into fields."""
 
     def __init__(self) -> None:
-        # self._config: ConfigParser = ConfigParser()
-        try:
-            # self._config.read(CONFIG_FILENAME)
-
-            self.right_ctrl_lang: int = int(DEFAULT_CONFIG['right_ctrl_lang'])
-            self.right_shift_lang: int = int(DEFAULT_CONFIG['right_shift_lang'])
-            self.key_press_timeout: float = float(DEFAULT_CONFIG['key_press_timeout'])
-            self.layout_check_interval: float = float(DEFAULT_CONFIG['layout_check_interval'])
-        except Exception as e:
-            logger.error('Config read issue: %s', str(e))
-
-    def _is_empty(self, section: str, option: str) -> bool:
-        """Checks if section or option do not exist."""
-
-        # Check if section exists
-        if not self._config.has_section(section):
-            logger.error('Section "[%s]" should be present.', section)
-            return True
-
-        # Check if option exists
-        if not self._config.has_option(section, option):
-            logger.error('Option should be present: [%s] -> %s', section, option)
-            return True
-
-    def _get_int(self, section: str, option: str) -> Optional[int]:
-        """
-        Reads option value from config section and parses it as integer.
-        If any exception happens then return None.
-        """
-
-        if self._is_empty(section, option):
-            return None
-
-        val: str = self._config.get(section, option)
-
-        retval: Optional[int] = None
-        # Parse value as integer
-        # noinspection PyBroadException
-        try:
-            retval = int(val, base=16) if val.startswith('0x') else int(val)
-        except Exception:
-            logger.error('Option should be integer either in "0xABC" or "123" format: [%s] -> %s = %s',
-                         section, option, val)
-        finally:
-            return retval
-
-    def _get_float(self, section: str, option: str) -> Optional[float]:
-        """
-        Reads option value from config section and parses it as float.
-        If any exception happens then return None.
-        """
-
-        if self._is_empty(section, option):
-            return None
-
-        val: Optional[float] = None
-        # noinspection PyBroadException
-        try:
-            val = self._config.getfloat(section, option)
-        except Exception:
-            raw: str = self._config.get(section, option)
-            logger.error("Option should contain either integer (ABC) or float (AB.C) value: [%s] -> %s = %s",
-                         section, option, raw)
-        finally:
-            return max(val, MIN_FLOAT) if val is not None else None
+        self.right_ctrl_lang: int = int(DEFAULT_CONFIG['right_ctrl_lang'])
+        self.right_shift_lang: int = int(DEFAULT_CONFIG['right_shift_lang'])
+        self.key_press_timeout: float = float(DEFAULT_CONFIG['key_press_timeout'])
+        self.layout_check_interval: float = float(DEFAULT_CONFIG['layout_check_interval'])
 
 
 def main() -> None:
