@@ -19,7 +19,7 @@ from pathlib import Path
 import pycountry
 from PIL import Image
 
-from tools import svg_util
+from tools import svg_tool
 
 PROJECT_ROOT: Path = Path(__file__).parent.parent
 FLAGS_LOCATION: Path = PROJECT_ROOT / "build/flags"
@@ -30,15 +30,15 @@ def get_flag_image(country_code: str, remove_border: bool, size: int) -> Image.I
     if not svg_path.exists():
         raise RuntimeError(f'Missing flag: {code}')
 
-    tree = svg_util.parse(svg_path)
+    tree = svg_tool.parse(svg_path)
 
     if country_code == "UA":
-        svg_util.fix_ukraine_colors(tree)
+        svg_tool.fix_ukraine_colors(tree)
 
     if remove_border:
-        svg_util.remove_border_line(tree)
+        svg_tool.remove_border_line(tree)
 
-    png_bytes: bytes = svg_util.render(tree, size)
+    png_bytes: bytes = svg_tool.render(tree, size)
 
     return Image.open(io.BytesIO(png_bytes))
 
