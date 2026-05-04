@@ -1,11 +1,32 @@
 # Image processing
-Pillow>=10.4.0,<13.0.0
+pillow~=12.2.0
 
 # System tray icon
-pystray>=0.19.5
+pystray~=0.19.5
 
 # Global keyboard hooks
-keyboard>=0.13.5
+keyboard~=0.13.5
 
 # Windows API
-pywin32>=306
+pywin32~=311.0
+
+# build_config.yaml
+pyyaml~=6.0.3
+
+# .env
+python-dotenv~=1.2.2
+
+# `Certificate Subject (CN=) == Publisher` check
+cryptography~=47.0.0
+
+# XML processing
+lxml~=6.1.0
+
+# SVG parsing
+svgelements~=1.9
+
+# convert SVG to PNG
+cairosvg~=2.9.0
+
+# country 2-letter codes
+pycountry~=26.2.16
