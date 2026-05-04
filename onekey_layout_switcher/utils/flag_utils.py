@@ -26,7 +26,9 @@
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+import logging
 import os.path
+from logging import Logger
 from typing import List, Dict, Optional
 
 from PIL import Image, ImageDraw, ImageFont
@@ -51,6 +53,8 @@ SPRITE_FLAGS = ['AW', 'AF', 'AO', 'AI', 'AX', 'AL', 'AD', 'AE', 'AR', 'AM', 'AS'
                 'RS', 'SS', 'ST', 'SR', 'SK', 'SI', 'SE', 'SZ', 'SX', 'SC', 'SY', 'TC', 'TD', 'TG', 'TH', 'TJ', 'TK',
                 'TM', 'TL', 'TO', 'TT', 'TN', 'TR', 'TV', 'TW', 'TZ', 'UG', 'UA', 'UM', 'UY', 'US', 'UZ', 'VA', 'VC',
                 'VE', 'VG', 'VI', 'VN', 'VU', 'WF', 'WS', 'YE', 'ZA', 'ZM', 'ZW']
+
+logger: Logger = logging.getLogger(__name__)
 
 
 class FlagUtils:
@@ -77,6 +81,7 @@ class FlagUtils:
             cell_size: int = self._sprite.width
             flag = self._sprite.crop((0, sprite_index * cell_size, cell_size, (sprite_index + 1) * cell_size))
         else:
+            logger.error(f"Sprite image does not contain {country_code = }")
             flag = self.create_unknown_flag()
 
         if country_code not in self._cache:
