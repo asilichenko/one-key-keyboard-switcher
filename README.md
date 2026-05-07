@@ -265,8 +265,8 @@ This program is designed to work on Windows systems only due to its dependency o
 * When you run the program for the first time, select any window and then try using the hotkey.
 * The program cannot change the keyboard language for the "Task Manager" as it rejects the request.
 * Clicking on certain icons in the tray may cause the hotkey to stop working -> just select some window.
-* You hold a hotkey for too long -> you may increase timeout value in the [config.ini](config.ini) - `key press timeout`.
 * If you press another key while holding a hotkey - this is a normal behavior, just to prevent unintentional layout changes.
+* Keyboard layout switching may not work when a window with elevated privileges (e.g. Task Manager, Registry Editor) is in focus. This is a Windows security restriction (UAC isolation) that prevents non-elevated applications from sending messages to elevated windows.
 
 # Author
 
