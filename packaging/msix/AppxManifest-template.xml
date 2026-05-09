@@ -45,7 +45,6 @@
     </Dependencies>
 
     <Resources>
-        <Resource Language="uk-UA"/>
         <Resource Language="en-US"/>
     </Resources>
 
