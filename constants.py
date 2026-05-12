@@ -26,7 +26,9 @@
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-# constants.py
-APP_NAME = "OneKeyLayoutSwitcher"
-APP_VERSION = "1.0.0"
+APP_NAME = "OneKey Layout Switcher"
+APP_VERSION = "1.1"
 ERR_LOG_FILENAME = "error.log"
+
+APP_DATA_DIR = APP_NAME.replace(' ', '')
+APP_DATA_DIR_MSIX = f'{APP_DATA_DIR}_msix'
