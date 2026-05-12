@@ -17,7 +17,7 @@ pyyaml~=6.0.3
 python-dotenv~=1.2.2
 
 # `Certificate Subject (CN=) == Publisher` check
-cryptography~=47.0.0
+cryptography~=48.0.0
 
 # XML processing
 lxml~=6.1.0
@@ -30,3 +30,6 @@ cairosvg~=2.9.0
 
 # country 2-letter codes
 pycountry~=26.2.16
+
+# make exe
+pyinstaller~=6.20.0
