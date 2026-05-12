@@ -27,9 +27,6 @@
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import ctypes
-from typing import Optional
-
-import keyboard_layout_controller
 
 # Define constants
 LOCALE_USER_DEFAULT = 0x0400
@@ -47,31 +44,73 @@ ERROR_INSUFFICIENT_BUFFER = 122
 # Setup kernel32 functions
 kernel32: ctypes.WinDLL = ctypes.windll.kernel32
 
-GetLocaleInfoW = kernel32.GetLocaleInfoW
-
 try:
     GetCurrentPackageFamilyName = kernel32.GetCurrentPackageFamilyName
 except AttributeError:
     GetCurrentPackageFamilyName = None
 
 
-def get_locale_info(locale, lc_type):
+def make_lcid(hkl_or_klid: str | int) -> int | None:
+    """
+    Make LCID from HKL or KLID.
+    :param hkl_or_klid: HKL as int or KLID as str
+    :return: int or None if ID does not contain language info
+    @see LANGID: https://learn.microsoft.com/en-us/windows/win32/msi/localizing-the-error-and-actiontext-tables
+    """
+    lang_id: int = (int(hkl_or_klid, 16) if isinstance(hkl_or_klid, str) else hkl_or_klid) & 0xFFFF
+
+    LANG_UNDEFINED: int = 0x0c00
+    if lang_id == LANG_UNDEFINED:
+        return None
+
+    SORT_DEFAULT: int = 0x0000
+    sort: int = SORT_DEFAULT
+    return (sort << 16) | lang_id
+
+
+def lcid_to_locale_name(lcid: int) -> str | None:
+    """Converts LCID (int) to Locale Name (str) using Windows API."""
+
+    # Define necessary constants
+    LOCALE_NAME_MAX_LENGTH = 85
+
+    # Prepare buffer for result
+    buffer = ctypes.create_unicode_buffer(LOCALE_NAME_MAX_LENGTH)
+
+    # Call LCIDToLocaleName
+    result = kernel32.LCIDToLocaleName(lcid, buffer, LOCALE_NAME_MAX_LENGTH, 0)
+
+    if result == 0:
+        return None
+
+    return buffer.value
+
+
+def get_locale_info_ex(locale_name: str | None, lc_type: int) -> str | None:
+    """https://learn.microsoft.com/en-us/windows/win32/api/winnls/nf-winnls-getlocaleinfoex
+    https://learn.microsoft.com/en-us/windows/win32/intl/locale-information-constants"""
+    if locale_name is None:
+        return None
+
     # 1. Call once with lpLCData=None to get necessary buffer size
-    size = GetLocaleInfoW(locale, lc_type, None, 0)
-    if size == 0:
+    buf_size: int = kernel32.GetLocaleInfoEx(locale_name, lc_type, None, 0)
+
+    if buf_size == 0:
         return None
 
     # 2. Prepare buffer and call again
-    buffer = ctypes.create_unicode_buffer(size)
-    result = GetLocaleInfoW(locale, lc_type, buffer, size)
+    buf = ctypes.create_unicode_buffer(buf_size)
+    result_size: int = kernel32.GetLocaleInfoEx(locale_name, lc_type, buf, buf_size)
 
-    if result > 0:
-        return buffer.value
-    return None
+    return buf.value if result_size > 0 else None
 
 
-def get_country_code(country_id) -> Optional[str]:
-    return get_locale_info(country_id, LOCALE_SISO3166CTRYNAME)
+def get_iso_country_code(locale_name: str) -> str | None:
+    return get_locale_info_ex(locale_name, LOCALE_SISO3166CTRYNAME)
+
+
+def get_country_name(locale_name: str) -> str | None:
+    return get_locale_info_ex(locale_name, LOCALE_SENGLISHCOUNTRYNAME)
 
 
 def is_msix_package() -> bool:
@@ -79,11 +118,6 @@ def is_msix_package() -> bool:
     if GetCurrentPackageFamilyName is None:
         return False
     buf_len = ctypes.c_uint32(0)
+    # noinspection PyCallingNonCallable
     ret = GetCurrentPackageFamilyName(ctypes.byref(buf_len), None)
     return ret in (0, ERROR_INSUFFICIENT_BUFFER)
-
-
-if __name__ == '__main__':
-    _country_id: int = keyboard_layout_controller.get_country_id()
-    _country_code = get_country_code(_country_id)
-    print(f'\nCurrent layout country code = {_country_code}')
