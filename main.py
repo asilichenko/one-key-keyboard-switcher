@@ -18,16 +18,22 @@
 __author__ = "Oleksii Sylichenko"
 __copyright__ = "Copyright © 2024-2026 Oleksii Sylichenko"
 __license__ = "GNU GPL v3+"
-__version__ = "1.0"
+__version__ = "1.1"
 
 import logging
 from logging import FileHandler, Logger
 from typing import List
 
+import keyboard_layout_controller
 import paths
 from config_reader import Config
+from constants import IS_DEV_MODE
 from keyboard_layout_monitor import KeyboardLayoutMonitor
 from keyboard_listener import KeyboardListener
+
+from onekey_layout_switcher.models import LayoutInfo
+from onekey_layout_switcher.utils import FlagUtil, KlidResolver, LayoutInfoUtil
+from tray_icon import TrayIcon
 
 
 def logging_config() -> None:
@@ -47,19 +53,20 @@ def main() -> None:
     logging_config()
     logger: Logger = logging.getLogger(__name__)
     logger.info('Start')
+    logger.info(f'{IS_DEV_MODE = }')
 
     config: Config = Config()
 
     keyboard_listeners: List[KeyboardListener] = [
         KeyboardListener('ctrl', timeout=config.key_press_timeout)
     ]
-    if config.right_ctrl_lang is not None:
+    if config.right_ctrl_hkl is not None:
         keyboard_listeners.append(KeyboardListener('right ctrl',
-                                                   lang_id=config.right_ctrl_lang,
+                                                   hkl=config.right_ctrl_hkl,
                                                    timeout=config.key_press_timeout))
-    if config.right_shift_lang is not None:
+    if config.right_shift_hkl is not None:
         keyboard_listeners.append(KeyboardListener('right shift',
-                                                   lang_id=config.right_shift_lang,
+                                                   hkl=config.right_shift_hkl,
                                                    timeout=config.key_press_timeout))
 
     def start_listen() -> None:
@@ -70,7 +77,28 @@ def main() -> None:
         for listener in keyboard_listeners:
             listener.stop_listen()
 
-    monitor: KeyboardLayoutMonitor = KeyboardLayoutMonitor(start_listen, stop_listen, config.layout_check_interval)
+    klid_resolver: KlidResolver = KlidResolver()
+    layout_info_util: LayoutInfoUtil = LayoutInfoUtil(klid_resolver=klid_resolver)
+    flag_util: FlagUtil = FlagUtil()
+
+    active_hkl: int = keyboard_layout_controller.get_active_hkl()
+    layout: LayoutInfo = layout_info_util.from_hkl(active_hkl)
+    country_code: str = layout.country_code or ''
+    if not country_code:
+        logger.error(f'Failed to obtain country code: {str(layout)}')
+
+    tray_icon: TrayIcon = TrayIcon(
+        flag_util=flag_util,
+        start_listen_keyboard=start_listen,
+        stop_listen_keyboard=stop_listen,
+        country_code=country_code
+    )
+
+    monitor: KeyboardLayoutMonitor = KeyboardLayoutMonitor(
+        tray_icon=tray_icon,
+        layout_info_util=layout_info_util,
+        check_interval=config.layout_check_interval
+    )
     monitor.start()
 
     logging.info('Exit')
