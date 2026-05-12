@@ -27,8 +27,8 @@
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 
-from .flag_utils import FlagUtils
+from .flag_util import FlagUtil
 
 __all__ = [
-    'FlagUtils',
+    'FlagUtil',
 ]
