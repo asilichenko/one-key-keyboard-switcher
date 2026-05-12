@@ -28,7 +28,11 @@
 
 
 from .flag_util import FlagUtil
+from .klid_resolver import KlidResolver
+from .layout_info_util import LayoutInfoUtil
 
 __all__ = [
     'FlagUtil',
+    'KlidResolver',
+    'LayoutInfoUtil',
 ]
