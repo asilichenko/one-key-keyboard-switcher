@@ -26,9 +26,13 @@
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+import os
+
 APP_NAME = "OneKey Layout Switcher"
 APP_VERSION = "1.1"
 ERR_LOG_FILENAME = "error.log"
+
+IS_DEV_MODE: bool = os.getenv('APP_DEV_MODE', '0') == '1'
 
 APP_DATA_DIR = APP_NAME.replace(' ', '')
 APP_DATA_DIR_MSIX = f'{APP_DATA_DIR}_msix'
