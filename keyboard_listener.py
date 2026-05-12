@@ -33,19 +33,18 @@ class KeyboardListener:
     _on_release_remove: Optional[Callable] = None
     """Function that removes 'on release' listener."""
 
-    def __init__(self, key_name: str, lang_id: int = None, timeout: float = None) -> None:
-        if lang_id is None:
-            logger.info('Set listener for round switch on "%s"', key_name)
+    def __init__(self, key_name: str, hkl: int | None = None, timeout: float = None) -> None:
+        if hkl is None:
+            logger.info(f'Set listener for round switch on "{key_name}"')
         else:
-            logger.info('Set listener for "%s" on "%s"', hex(lang_id), key_name)
+            logger.info(f'Set listener for "{hkl:08x}" on "{key_name}"')
 
         self._timeout: float = timeout if timeout is not None else TIMEOUT
         self._key_name: str = key_name
         """Name of the observed key."""
         self._key_down_time: float = 0
         """Time when the key was pressed down."""
-        self._lang_id: int = lang_id
-        """See LANGID: https://learn.microsoft.com/en-us/windows/win32/msi/localizing-the-error-and-actiontext-tables"""
+        self._hkl: int | None = hkl
 
     def start_listen(self) -> None:
         if self._on_press_remove is None:
@@ -89,7 +88,7 @@ class KeyboardListener:
             return
         self._key_down_time = 0
 
-        if self._lang_id is not None:
-            keyboard_layout_controller.set_layout(self._lang_id)
+        if self._hkl is not None:
+            keyboard_layout_controller.set_layout(self._hkl)
         else:
             keyboard_layout_controller.set_next_layout()
