@@ -18,8 +18,8 @@ import logging
 logger: logging.Logger = logging.getLogger(__name__)
 
 DEFAULT_CONFIG = {
-    'right_ctrl_lang': -0xf57fbde,
-    'right_shift_lang': 0x4090409,
+    'right_ctrl_hkl': -0xf57fbde,
+    'right_shift_hkl': 0x4090409,
     'key_press_timeout': 0.15,
     'layout_check_interval': 0.5
 }
@@ -29,16 +29,16 @@ class Config:
     """Reads config from an INI file and stores data into fields."""
 
     def __init__(self) -> None:
-        self.right_ctrl_lang: int = int(DEFAULT_CONFIG['right_ctrl_lang'])
-        self.right_shift_lang: int = int(DEFAULT_CONFIG['right_shift_lang'])
+        self.right_ctrl_hkl: int = int(DEFAULT_CONFIG['right_ctrl_hkl'])
+        self.right_shift_hkl: int = int(DEFAULT_CONFIG['right_shift_hkl'])
         self.key_press_timeout: float = float(DEFAULT_CONFIG['key_press_timeout'])
         self.layout_check_interval: float = float(DEFAULT_CONFIG['layout_check_interval'])
 
 
 def main() -> None:
     config: Config = Config()
-    print(f'{config.right_ctrl_lang = }')
-    print(f'{config.right_shift_lang = }')
+    print(f'{config.right_ctrl_hkl = }')
+    print(f'{config.right_shift_hkl = }')
     print(f'{config.key_press_timeout = }')
     print(f'{config.layout_check_interval = }')
 
