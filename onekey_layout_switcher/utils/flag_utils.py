@@ -29,14 +29,12 @@
 import logging
 import os.path
 from logging import Logger
-from typing import List, Dict, Optional
+from typing import List, Dict
 
 from PIL import Image, ImageDraw, ImageFont
 from PIL.ImageFile import ImageFile
 
-import keyboard_layout_controller
 import paths
-from onekey_layout_switcher.utils import winapi_utils
 
 SPRITE_FLAGS = ['AW', 'AF', 'AO', 'AI', 'AX', 'AL', 'AD', 'AE', 'AR', 'AM', 'AS', 'AQ', 'TF', 'AG', 'AU', 'AT', 'AZ',
                 'BI', 'BE', 'BJ', 'BQ', 'BF', 'BD', 'BG', 'BH', 'BS', 'BA', 'BL', 'BY', 'BZ', 'BM', 'BO', 'BR', 'BB',
@@ -129,17 +127,22 @@ class FlagUtils:
         return img
 
 
+def main():
+    country_codes = [
+        'aa',
+        'UA',
+        'US',
+        'NP',
+        '001',
+    ]
+
+    for country_code in country_codes:
+        print(f'{country_code = }')
+        if country_code:
+            FlagUtils().flag_for(country_code).show()
+        else:
+            FlagUtils().create_unknown_flag().show()
+
+
 if __name__ == '__main__':
-    _country_id: int = keyboard_layout_controller.get_country_id()
-    _country_code: Optional[str] = winapi_utils.get_country_code(_country_id)
-
-    # _country_code = 'aa'
-    # _country_code = 'UA'
-    # _country_code = 'US'
-    # _country_code = 'NP'
-
-    print(f'{_country_code = }')
-    if _country_code:
-        FlagUtils().flag_for(_country_code).show()
-    else:
-        FlagUtils().create_unknown_flag().show()
+    main()
