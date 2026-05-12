@@ -54,6 +54,24 @@ SPRITE_FLAGS = ['AW', 'AF', 'AO', 'AI', 'AX', 'AL', 'AD', 'AE', 'AR', 'AM', 'AS'
 logger: Logger = logging.getLogger(__name__)
 
 
+def apply_dev_overlay(icon: Image.Image) -> Image.Image:
+    icon = icon.copy()
+
+    radius = 8
+    margin = 1
+
+    x1 = icon.width - radius * 2 - margin
+    y1 = icon.height - radius * 2 - margin
+
+    x2 = icon.width - margin
+    y2 = icon.height - margin
+
+    draw = ImageDraw.Draw(icon)
+    draw.ellipse((x1, y1, x2, y2), fill='cyan')
+
+    return icon
+
+
 class FlagUtil:
     def __init__(
             self,
