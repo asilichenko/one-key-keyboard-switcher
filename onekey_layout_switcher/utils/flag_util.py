@@ -29,7 +29,6 @@
 import logging
 import os.path
 from logging import Logger
-from typing import List, Dict
 
 from PIL import Image, ImageDraw, ImageFont
 from PIL.ImageFile import ImageFile
@@ -55,15 +54,16 @@ SPRITE_FLAGS = ['AW', 'AF', 'AO', 'AI', 'AX', 'AL', 'AD', 'AE', 'AR', 'AM', 'AS'
 logger: Logger = logging.getLogger(__name__)
 
 
-class FlagUtils:
-    def __init__(self,
-                 sprite_file_name: str = "sprite_64_noline.png",
-                 sprite_flags=None
-                 ):
+class FlagUtil:
+    def __init__(
+            self,
+            sprite_file_name: str = "sprite_64_noline.png",
+            sprite_flags: list[str] | None = None,
+    ) -> None:
+        flags = SPRITE_FLAGS if sprite_flags is None else sprite_flags
         self._sprite: ImageFile = self._load_sprite(sprite_file_name)
-        self._sprite_flags: List[str] = SPRITE_FLAGS if sprite_flags is None else sprite_flags
-
-        self._cache: Dict[str, Image.Image] = {}
+        self._sprite_index: dict[str, int] = {code: i for i, code in enumerate(flags)}
+        self._cache: dict[str, Image.Image] = {}
 
     @staticmethod
     def _load_sprite(file_name: str) -> ImageFile:
@@ -74,53 +74,36 @@ class FlagUtils:
         if country_code in self._cache:
             return self._cache[country_code]
 
-        if country_code in self._sprite_flags:
-            sprite_index = self._sprite_flags.index(country_code)
+        if country_code in self._sprite_index:
+            sprite_index = self._sprite_index[country_code]
             cell_size: int = self._sprite.width
             flag = self._sprite.crop((0, sprite_index * cell_size, cell_size, (sprite_index + 1) * cell_size))
         else:
             logger.error(f"Sprite image does not contain {country_code = }")
-            flag = self.create_unknown_flag()
+            flag = self._create_unknown_flag()
 
-        if country_code not in self._cache:
-            self._cache[country_code] = flag
-
+        self._cache[country_code] = flag
         return flag
 
-    def create_unknown_flag(self) -> Image.Image:
-        """
-        Creates a flag image fitting into a square of given size.
-        Background is transparent, flag rectangle is 4:3 centered in the square.
-        """
+    def _create_unknown_flag(self) -> Image.Image:
         size = self._sprite.width
-
         flag_w = size
         flag_h = size * 3 // 4
 
         img = Image.new("RGBA", (size, size), (0, 0, 0, 0))
         draw = ImageDraw.Draw(img)
 
-        x0 = 0
-        y0 = (size - flag_h) // 2
-        x1 = x0 + flag_w - 1
-        y1 = y0 + flag_h - 1
+        x0, y0 = 0, (size - flag_h) // 2
+        x1, y1 = flag_w - 1, y0 + flag_h - 1
+        draw.rectangle([x0, y0, x1, y1], fill=(240, 240, 240, 255))
 
-        flag_fill = (240, 240, 240, 255)
-        draw.rectangle([x0, y0, x1, y1], fill=flag_fill)
-
-        text = "?"
-        text_fill = (0, 0, 0, 255)
-
-        font_size = int(flag_h * 0.85)
         try:
-            font = ImageFont.truetype("arial.ttf", font_size)
-
-            if font:
-                bbox = draw.textbbox((0, 0), text, font=font)
-                tw, th = bbox[2] - bbox[0], bbox[3] - bbox[1]
-                x = x0 + (flag_w - tw) // 2 - bbox[0]
-                y = y0 + (flag_h - th) // 2 - bbox[1]
-                draw.text((x, y), text, fill=text_fill, font=font)
+            font = ImageFont.truetype("arial.ttf", int(flag_h * 0.85))
+            bbox = draw.textbbox((0, 0), "?", font=font)
+            tw, th = bbox[2] - bbox[0], bbox[3] - bbox[1]
+            x = x0 + (flag_w - tw) // 2 - bbox[0]
+            y = y0 + (flag_h - th) // 2 - bbox[1]
+            draw.text((x, y), "?", fill=(0, 0, 0, 255), font=font)
         except (IOError, OSError):
             pass
 
@@ -136,12 +119,10 @@ def main():
         '001',
     ]
 
+    flag_util = FlagUtil()
     for country_code in country_codes:
         print(f'{country_code = }')
-        if country_code:
-            FlagUtils().flag_for(country_code).show()
-        else:
-            FlagUtils().create_unknown_flag().show()
+        flag_util.flag_for(country_code).show()
 
 
 if __name__ == '__main__':
