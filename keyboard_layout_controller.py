@@ -29,11 +29,10 @@ https://learn.microsoft.com/en-us/windows/win32/winmsg/wm-inputlangchangerequest
 """
 
 
-def get_keyboard_layout_id() -> int:
-    """Returns keyboard layout ID for the foreground window.
+def get_active_hkl() -> int:
+    """Returns active keyboard HKL for the foreground window.
 
-    :return: keyboard layout ID
-    :rtype: int
+    :return: HKL
     """
 
     foreground_window_handle: int = win32gui.GetForegroundWindow()
@@ -41,42 +40,27 @@ def get_keyboard_layout_id() -> int:
     return win32api.GetKeyboardLayout(thread_id)
 
 
-def extract_country_id(layout_id: int) -> int:
-    """Extracts country ID from the keyboard layout ID.
-    :param layout_id: The ID of the keyboard layout.
-    :return: The last 16 bits of the layout ID.
-    :rtype: int
-    """
-
-    return layout_id & (2 ** 16 - 1)
-
-
-def get_country_id() -> int:
-    layout_id: int = get_keyboard_layout_id()
-    return extract_country_id(layout_id)
-
-
 def set_next_layout() -> None:
     """Sets the next (cyclically) layout in the list as the current one."""
 
-    layouts: tuple = win32api.GetKeyboardLayoutList()
-    layout_id: int = get_keyboard_layout_id()
+    installed: tuple[int, ...] = win32api.GetKeyboardLayoutList()
+    current_hkl: int = get_active_hkl()
 
-    index: int = layouts.index(layout_id)
-    layout_id: int = layouts[(index + 1) % len(layouts)]
-    set_layout(layout_id)
+    current_index: int = installed.index(current_hkl)
+    next_hkl: int = installed[(current_index + 1) % len(installed)]
+    set_layout(next_hkl)
 
 
 def get_parent_window(hwnd: int) -> Optional[int]:
     return win32gui.GetParent(hwnd)
 
 
-def set_layout(layout_id: int) -> None:
+def set_layout(hkl: int) -> None:
     """Sets the keyboard layout according to either the language ID or the layout ID.
     If a language contains more than one layout, it could be important what you pass to this method
     and what you want to change.
 
-    :param layout_id: Either the keyboard layout ID or the country ID.
+    :param hkl: HKL of the keyboard layout. Must be present in the installed list.
     """
 
     foreground_wnd: int = win32gui.GetForegroundWindow()
@@ -98,7 +82,7 @@ def set_layout(layout_id: int) -> None:
         window_title = win32gui.GetWindowText(foreground_wnd)
     """
 
-    win32api.PostMessage(hwnd, WM_INPUTLANGCHANGEREQUEST, INPUTLANGCHANGE_SYSCHARSET, layout_id)
+    win32api.PostMessage(hwnd, WM_INPUTLANGCHANGEREQUEST, INPUTLANGCHANGE_SYSCHARSET, hkl)
     """Async request for language changing.
     Window may reject language changing.
     
@@ -108,13 +92,3 @@ def set_layout(layout_id: int) -> None:
     
     Always use the original ID. If it is negative, keep it negative; do not mask it with & 0xFFFFFFF.
     """
-
-
-if __name__ == '__main__':
-    print()
-
-    _layout_list = win32api.GetKeyboardLayoutList()
-    print(f'Layout list: {_layout_list}')
-
-    _country_id = get_country_id()
-    print(f'Current active window layout country id: {hex(_country_id)}')
