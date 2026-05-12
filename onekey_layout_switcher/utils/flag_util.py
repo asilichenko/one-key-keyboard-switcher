@@ -33,6 +33,7 @@ from logging import Logger
 from PIL import Image, ImageDraw, ImageFont
 from PIL.ImageFile import ImageFile
 
+from constants import IS_DEV_MODE
 import paths
 
 SPRITE_FLAGS = ['AW', 'AF', 'AO', 'AI', 'AX', 'AL', 'AD', 'AE', 'AR', 'AM', 'AS', 'AQ', 'TF', 'AG', 'AU', 'AT', 'AZ',
@@ -92,34 +93,38 @@ class FlagUtil:
         if country_code in self._cache:
             return self._cache[country_code]
 
-        if country_code in self._sprite_index:
+        if not country_code:
+            flag = self._create_unknown_flag()
+        elif country_code not in self._sprite_index:
+            logger.error(f"Sprite does not contain {country_code = }")
+            flag = self._create_unknown_flag()
+        else:
             sprite_index = self._sprite_index[country_code]
             cell_size: int = self._sprite.width
             flag = self._sprite.crop((0, sprite_index * cell_size, cell_size, (sprite_index + 1) * cell_size))
-        else:
-            logger.error(f"Sprite image does not contain {country_code = }")
-            flag = self._create_unknown_flag()
+
+        if IS_DEV_MODE:
+            flag = apply_dev_overlay(flag)
 
         self._cache[country_code] = flag
         return flag
 
     def _create_unknown_flag(self) -> Image.Image:
-        size = self._sprite.width
-        flag_w = size
-        flag_h = size * 3 // 4
+        size: int = self._sprite.width
+        flag_h: int = size * 3 // 4
 
         img = Image.new("RGBA", (size, size), (0, 0, 0, 0))
         draw = ImageDraw.Draw(img)
 
-        x0, y0 = 0, (size - flag_h) // 2
-        x1, y1 = flag_w - 1, y0 + flag_h - 1
-        draw.rectangle([x0, y0, x1, y1], fill=(240, 240, 240, 255))
+        x1, y0 = size - 1, (size - flag_h) // 2
+        y1 = y0 + flag_h - 1
+        draw.rectangle([0, y0, x1, y1], fill=(240, 240, 240, 255))
 
         try:
             font = ImageFont.truetype("arial.ttf", int(flag_h * 0.85))
             bbox = draw.textbbox((0, 0), "?", font=font)
             tw, th = bbox[2] - bbox[0], bbox[3] - bbox[1]
-            x = x0 + (flag_w - tw) // 2 - bbox[0]
+            x = (size - tw) // 2 - bbox[0]
             y = y0 + (flag_h - th) // 2 - bbox[1]
             draw.text((x, y), "?", fill=(0, 0, 0, 255), font=font)
         except (IOError, OSError):
