@@ -12,7 +12,9 @@ version:
 package:
   name: PublisherName.PackageName
   display_name: Package Display Name
+
   publisher: CN=00000000-0000-0000-0000-000000000000
+
   publisher_display_name: Publisher Name
 
 signing:
