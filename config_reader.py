@@ -18,8 +18,8 @@ import logging
 logger: logging.Logger = logging.getLogger(__name__)
 
 DEFAULT_CONFIG = {
-    'right_ctrl_lang': 0x422,
-    'right_shift_lang': 0x409,
+    'right_ctrl_lang': -0xf57fbde,
+    'right_shift_lang': 0x4090409,
     'key_press_timeout': 0.15,
     'layout_check_interval': 0.5
 }
