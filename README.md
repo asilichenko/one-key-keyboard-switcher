@@ -7,7 +7,7 @@ It utilizes the win32api, thus it will only work on Windows systems.
 > [!IMPORTANT]
 > The app does not log or transmit any keystrokes. It only listens for a configured hotkey to switch layout.
 
-<img alt="title" width="600" src="docs/img/title.jpg"/>
+<img width="600" alt="hero image" src="https://github.com/user-attachments/assets/f6c788b9-c462-4963-983a-a6ba48b2cbd5" />
 
 _Title image credits:_
 
